@@ -69,7 +69,36 @@ namespace Actividad
         public override void MostrarInformacion()
         {
             base.MostrarInformacion();
-            Console.WriteLine();
+            Console.WriteLine("Numero de cabañas: "+ numeroCabañas);
+            Console.WriteLine("Numero de habitacion: "+numeroHabitacion);
+            Console.WriteLine("Estado de Hospedaje: "+estadoHospedaje);
+        }
+
+        public override double CalcularCostos(int cantidad) 
+        {
+            if (cantidad <0)
+                throw new ArgumentException("La Cantidad ingresada es Invalida");
+            return precioNoche;
+        
+        }
+
+        public void Reservar() 
+        {
+            if (EstadoHospedaje != EstadoCabaña.Disponible) throw new InvalidOperationException("La cabaña esta fiera de servicio");
+
+            estadoHospedaje = EstadoCabaña.Ocupado;
+            Console.WriteLine("La Cabaña a sido reservada");
+        
+        }
+
+        public void CarcelarReservacion() 
+        {
+            if (EstadoHospedaje != EstadoCabaña.Ocupado)
+                throw new InvalidOperationException("La cabaña no está ocupada.");
+
+            EstadoHospedaje = EstadoCabaña.Disponible;
+            Console.WriteLine("Reservación cancelada.");
+
         }
 
 

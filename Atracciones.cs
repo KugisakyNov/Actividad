@@ -44,11 +44,28 @@ namespace Actividad
             get { return estadoAtraccion; }
             set { estadoAtraccion = value; }
         }
-        public virtual void MostrarInformacion() 
+        public virtual void MostrarInformacion()
         {
+            Console.WriteLine($"ID: {Id}");
+            Console.WriteLine($"Nombre: {Nombre}");
+            Console.WriteLine($"Capacidad de personas: {CapacidadPersona}");
+            Console.WriteLine($"Estado de la atracción: {EstadoAtraccion}");
 
-        
+
         }
+
+        public abstract double CalcularCostos(int cantidad);
+
+
+        public void ActualizarEstado(EstadoActraccion nuevoEstado)
+        {
+            EstadoAtraccion = nuevoEstado;
+
+            Console.WriteLine(
+                $"El estado de {Nombre} se actualizó a {EstadoAtraccion}.");
+        }
+
+
     }
 
    

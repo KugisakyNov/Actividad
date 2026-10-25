@@ -50,7 +50,7 @@ namespace Actividad
             Console.WriteLine($"Capacidad de Personas: {CapacidadPersona}");
         }
 
-        public double CalcularCosto(int cantidad)
+        public override double CalcularCostos(int cantidad)
         {
            
             double costoBase = 0;

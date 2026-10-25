@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Actividad
 {
-    internal class Sendero
+     class Sendero
     {
     }
 }

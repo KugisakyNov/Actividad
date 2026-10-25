@@ -72,5 +72,24 @@ namespace Actividad
         {
             listaAtracciones.Add(atraccion);
         }
+
+
+        public void ListarAtracciones()
+        {
+            Console.WriteLine($"\n--- Atracciones del parque {Nombre} ---");
+
+            if (listaAtracciones.Count == 0)
+            {
+                Console.WriteLine("No hay atracciones registradas.");
+                return;
+            }
+
+            foreach (Atracciones atraccion in listaAtracciones)
+            {
+                Console.WriteLine("-----------------------------");
+                atraccion.MostrarInformacion();
+            }
+        }
+
     }
 }
