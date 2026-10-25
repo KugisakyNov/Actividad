@@ -24,9 +24,27 @@ namespace Actividad
         public string Id
         {
             get { return id; }
-            set { id = string.IsNullOrWhiteSpace(value) ? throw new ArgumentException("Ingresar ID") : value; }
+            set { id = string.IsNullOrWhiteSpace(value) ? throw new ArgumentException("Tiene que ingresar ID") : value; }
 
         }
+        public string Name 
+        {
+            get { return name; }
+            set { name = string.IsNullOrWhiteSpace(value) ? throw new ArgumentException("Tiene que ingresar Nombre") : value; }
+        }
+
+        public int CapacidadPersona
+        {
+            get { return Capacidadpersona; }
+            set { Capacidadpersona = value < 0 ? throw new ArgumentException("Capacidad no Valida") : value; }
+        }
+
+        public EstadoActraccion EstadoAtraccion
+        {
+            get { return estadoAtraccion; }
+            set { estadoAtraccion = value; }
+        }
+        public abstract void MostrarInformacion();
     }
     
 }

@@ -57,7 +57,7 @@ namespace Actividad
             get { return listaAtracciones; }
         }
 
-        public void MostrarInformacion()
+        public virtual void  MostrarInformacion()
         {
             Console.WriteLine($"Nombre del Parque: {Nombre}");
             Console.WriteLine($"Tipo de Parque: {tipoParque}");

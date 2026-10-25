@@ -44,9 +44,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Atracciones.cs" />
+    <Compile Include="Boleto.cs" />
+    <Compile Include="Cabañas.cs" />
+    <Compile Include="GuiaTuristico.cs" />
+    <Compile Include="Mirador.cs" />
     <Compile Include="Parque.cs" />
+    <Compile Include="Piscinas.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sendero.cs" />
+    <Compile Include="Visitantes.cs" />
+    <Compile Include="ZonaVerde.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
