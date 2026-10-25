@@ -11,7 +11,7 @@ namespace Actividad
         Narural,
         Acuatico,
     }
-    public enum EstadoCAbañas
+    public enum EstadoCabaña
     {
         Disponible,
         Ocupado,

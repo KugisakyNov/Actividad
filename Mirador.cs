@@ -41,7 +41,7 @@ namespace Actividad
 
         public override void MostrarInformacion()
         {
-            Console.WriteLine($"Nombre: {Name}");
+            Console.WriteLine($"Nombre: {Nombre}");
             Console.WriteLine($"Ubicación: {Id}");
             Console.WriteLine($"Altura en Metros: {AlturaMetro}");
             Console.WriteLine($"Vista Principal: {vistaPrincipal}");

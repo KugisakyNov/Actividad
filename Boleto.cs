@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Actividad
 {
-    internal class Boleto
+     class Boleto
     {
         private string NumeroBoleto;
         private double PrecioEntrada;
@@ -42,5 +42,35 @@ namespace Actividad
         }
 
 
+        public Visitantes cliente 
+        {
+            get { return cliente; }
+            set { cliente = value ??  throw new ArgumentException("El cliente debe estar ingresado"); }
+        
+        }
+
+        public double CalcularTotal() 
+        {
+            return precioEntrada;
+        
+        }
+
+
+
+        public void ImprimirComprobante(Parque parque) 
+        {
+            Console.WriteLine("\n========== BOLETO ==========");
+            Console.WriteLine($"Numero de Boleto: { numeroBoleto}");
+            Console.WriteLine($"Visitante: {cliente.Nombre}");
+            Console.WriteLine($"Parque: {parque}");
+            Console.WriteLine($"Fecha: {FechaEmision}");
+            Console.WriteLine($"Total: ${CalcularTotal():0.00}");
+            Console.WriteLine("============================");
+        }
     }
+
+       
+
+
+    
 }

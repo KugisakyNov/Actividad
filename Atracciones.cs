@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace Actividad
 {
-    public abstract class Atracciones 
+    public abstract class Atracciones
     {
         protected string id;
-        protected string name;
+        protected string nombre;
         protected int Capacidadpersona;
         protected EstadoActraccion estadoAtraccion;
 
-        protected Atracciones(string id, string name, int capacidadpersona, EstadoActraccion estadoAtraccion)
+        protected Atracciones(string id, string Nombre, int capacidadpersona, EstadoActraccion estadoAtraccion)
         {
             this.id = id;
-            this.name = name;
+            this.nombre = Nombre;
             this.Capacidadpersona = capacidadpersona;
             this.estadoAtraccion = estadoAtraccion;
         }
@@ -27,10 +27,10 @@ namespace Actividad
             set { id = string.IsNullOrWhiteSpace(value) ? throw new ArgumentException("Tiene que ingresar ID") : value; }
 
         }
-        public string Name 
+        public string Nombre
         {
-            get { return name; }
-            set { name = string.IsNullOrWhiteSpace(value) ? throw new ArgumentException("Tiene que ingresar Nombre") : value; }
+            get { return Nombre; }
+            set { Nombre = string.IsNullOrWhiteSpace(value) ? throw new ArgumentException("Tiene que ingresar Nombre") : value; }
         }
 
         public int CapacidadPersona
@@ -44,7 +44,12 @@ namespace Actividad
             get { return estadoAtraccion; }
             set { estadoAtraccion = value; }
         }
-        public abstract void MostrarInformacion();
+        public virtual void MostrarInformacion() 
+        {
+
+        
+        }
     }
-    
+
+   
 }
