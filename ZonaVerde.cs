@@ -12,7 +12,7 @@ namespace Actividad
         private bool requiereTrajeBano;
 
         public ZonaVerde(
-           string id, string nombre, int capacidad,TipoZonaVerde tipoZona): base(id, nombre, capacidad,EstadoActraccion.Disponible)
+           string id, string nombre, int capacidad,TipoZonaVerde tipoZona): base(id, nombre, capacidad,EstadoAtraccion.Disponible)
         {
             this.tipoZona = tipoZona;
             this.requiereTrajeBano = false;
@@ -32,17 +32,14 @@ namespace Actividad
 
         public override void MostrarInformacion()
         {
-            Console.WriteLine(
-                $"Zona verde: {Nombre} | Tipo: {TipoZona} | " +
+            Console.WriteLine($"Zona verde: {Nombre} | Tipo: " +
+                $"{TipoZona} | " +
                 $"Requiere traje de baño: {RequiereTrajeBano}");
         }
 
         public override double CalcularCostos(int cantidad)
         {
-            if (cantidad < 0)
-                throw new ArgumentException("La cantidad no puede ser negativa.");
-
-            return 0;
+            return 0.00;
         }
     }
 

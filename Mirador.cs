@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 namespace Actividad
 {
      class Mirador:Atracciones
-    {
+     {
         private double alturaMetro;
         private string vistaPrincipal;
         private string material;
 
-        public Mirador(string id,string nombre,int capacidad,EstadoActraccion estadoActraccion,double alturaMetro,string VistaPrincipal,string Material ):base(id,nombre,capacidad,estadoActraccion)
+        public Mirador(string id,string nombre,int capacidad,EstadoAtraccion estadoAtraccion,double alturaMetro,string VistaPrincipal,string Material ):base(id,nombre,capacidad,estadoAtraccion)
         {
             this.alturaMetro = alturaMetro;
             this.vistaPrincipal = VistaPrincipal;
@@ -22,58 +22,68 @@ namespace Actividad
         public double AlturaMetro
         {
             get { return alturaMetro; }
-            set { alturaMetro =value < 0 ? throw new ArgumentException("Altura Inavalida. "): value; }
+            set
+            {
+                if (value <= 0)
+                {
+                    Console.WriteLine("la altura del mirador debe ser mayor que cero.");
+                }
+                else
+                {
+                    this.alturaMetro = value;
+                }
+            }
         }
         public string VistaPrincipal 
         {
             get { return vistaPrincipal; }
-            set { vistaPrincipal = value; }
+            set
+            {
+                if (vistaPrincipal == null || vistaPrincipal.Trim() == "")
+                {
+                    Console.WriteLine("la vista principal no puede estar vacia.");
+                }
+                else
+                {
+                    this.vistaPrincipal = value;
+                }
+            }
         }
 
         public string Material 
         {
             get { return material; }
-            set { material = value; }
-
+            set
+            {
+                if (material == null || material.Trim() == "")
+                {
+                    Console.WriteLine("el material no puede estar vacio.");
+                }
+                else
+                {
+                    this.material = value;
+                }
+            }
         }
 
 
 
         public override void MostrarInformacion()
         {
-            Console.WriteLine($"Nombre: {Nombre}");
-            Console.WriteLine($"Ubicación: {Id}");
+            base.MostrarInformacion();
             Console.WriteLine($"Altura en Metros: {AlturaMetro}");
             Console.WriteLine($"Vista Principal: {vistaPrincipal}");
             Console.WriteLine($"Material del Mirador: {material}");
-            Console.WriteLine($"Estado de la Atracción: {EstadoAtraccion}");
-            Console.WriteLine($"Capacidad de Personas: {CapacidadPersona}");
         }
-
+        //metodo para sugerir una foto desde el mirador
+        public override string FotoSugerida()
+        {
+            return "una foto panoramica con la vista de " + vistaPrincipal;
+        }
+        
         public override double CalcularCostos(int cantidad)
         {
-           
-            double costoBase = 0;
-            if (cantidad <= 0)
-            {
-                throw new ArgumentException("La cantidad de personas debe ser mayor a cero.");
-            }
-            if (cantidad == 1)
-            {
-              
-                
-                costoBase = 1.50;
-            }
-            else
-            {
-              
-                costoBase = 3.00;
-
-
-            }
-            return costoBase * cantidad;
+            return 0.00;
         }
-
-
-    }
+     }
 }

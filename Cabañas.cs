@@ -4,107 +4,144 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Actividad
 {
     public class Cabañas : Atracciones
     {
-        private int numeroCabañas;
-        private int numeroHabitacion;
-        private double precioNoche;
-        private EstadoCabaña EstadoHospedaje;
+        private int _numeroCabaña;
+        private int _numeroHabitaciones;
+        private double _precioNoche;
+        private EstadoCabaña _estadoHospedaje;
 
-
-        public Cabañas(string id, string Nombre, int capacidadpersona, EstadoActraccion estadoAtraccion, int NumeroCabañas, int NumeroHabitacion, double PrecioNoche, EstadoCabaña EstadoHospedaje) : base(id, Nombre, capacidadpersona, estadoAtraccion)
+        public Cabañas(string id, string nombre, int capacidadPersona, EstadoAtraccion estadoAtraccion,int numeroCabaña, int numeroHabitaciones, double precioNoche, EstadoCabaña estadoHospedaje)
+            : base(id, nombre, capacidadPersona, estadoAtraccion)
         {
-            this.numeroCabañas = NumeroCabañas;
-            this.numeroHabitacion = NumeroHabitacion;
-            this.precioNoche = PrecioNoche;
-            this.EstadoHospedaje = EstadoHospedaje;
-
-        
+            NumeroCabaña = numeroCabaña;
+            NumeroHabitaciones = numeroHabitaciones;
+            PrecioNoche = precioNoche;
+            EstadoHospedaje = estadoHospedaje;
         }
-        public int Numerocabaña 
+
+        public int NumeroCabaña
         {
-            get {return numeroCabañas;}
-            set 
+            get { return _numeroCabaña; }
+            set
             {
                 if (value <= 0)
-                    throw new ArgumentException("Se debe asignar Numero de Cabaña");
-                numeroCabañas=value;
+                {
+                    Console.WriteLine("el número de cabaña debe ser mayor que cero.");
+                }
+                else
+                {
+                    _numeroCabaña = value;
+                }
             }
         }
 
-        public int NumeroHabitacion 
+        public int NumeroHabitaciones
         {
-            get {return numeroHabitacion;}
-            set 
+            get { return _numeroHabitaciones; }
+            set
             {
                 if (value <= 0)
-                    throw new ArgumentException("Se debe tener una habiatacion libre");
-                numeroHabitacion=value;
-
+                {
+                    Console.WriteLine("la cabaña debe tener al menos una habitacion.");
+                }
+                else
+                {
+                    _numeroHabitaciones = value;
+                }
             }
-        
         }
 
-        public double PrecioNoche 
+        public double PrecioNoche
         {
-            get {return precioNoche;}
-            set 
+            get { return _precioNoche; }
+            set
             {
                 if (value < 0)
-                    throw new ArgumentException("El precio no puede ser negativo o invalido");
-                precioNoche=value;
+                {
+                    Console.WriteLine("el precio por noche no puede ser negativo.");
+                }
+                else
+                {
+                    _precioNoche = value;
+                }
             }
-        
         }
 
-        public EstadoCabaña estadoHospedaje 
+        public EstadoCabaña EstadoHospedaje
         {
-            get { return EstadoHospedaje; }
-            set { estadoHospedaje = value; }
-        
+            get { return _estadoHospedaje; }
+            set { _estadoHospedaje = value; }
+        }
+
+        public bool Reservar()
+        {
+            if (_estadoHospedaje == EstadoCabaña.Disponible)
+            {
+                _estadoHospedaje = EstadoCabaña.Ocupado;
+                Console.WriteLine("La cabaña: " + Nombre + " esta reservada.");
+                return true;
+            }
+            Console.WriteLine("La cabaña: " + Nombre + " no se puede reservar, su estado es: " + _estadoHospedaje + ".");
+            return false;
+        }
+
+        public void CancelarReservacion()
+        {
+            if (_estadoHospedaje == EstadoCabaña.Ocupado)
+            {
+                _estadoHospedaje = EstadoCabaña.Disponible;
+                Console.WriteLine("La reservacion de la " + Nombre + " ya fue actualizada, vuelve a estar disponible.");
+            }
         }
 
         public override void MostrarInformacion()
         {
             base.MostrarInformacion();
-            Console.WriteLine("Numero de cabañas: "+ numeroCabañas);
-            Console.WriteLine("Numero de habitacion: "+numeroHabitacion);
-            Console.WriteLine("Estado de Hospedaje: "+estadoHospedaje);
+            Console.WriteLine("Cabaña #" + _numeroCabaña
+                + " | Habitaciones: "
+                + _numeroHabitaciones + " | Precio por noche: $"
+                + _precioNoche.ToString("0.00")
+                + " | Hospedaje: " + _estadoHospedaje);
         }
 
-        public override double CalcularCostos(int cantidad) 
+        public override bool RegistrarIngreso(int cantidad)
         {
-            if (cantidad <0)
-                throw new ArgumentException("La Cantidad ingresada es Invalida");
-            return precioNoche;
-        
+            if (_estadoHospedaje != EstadoCabaña.Disponible)
+            {
+                Console.WriteLine("La cabaña " + Nombre + " no esta disponible (" + _estadoHospedaje + ").");
+                return false;
+            }
+
+            bool pudoEntrar = base.RegistrarIngreso(cantidad);
+            if (pudoEntrar)
+            {
+                Reservar();
+            }
+            return pudoEntrar;
         }
 
-        public void Reservar() 
+        public override void RegistrarSalida(int cantidad)
         {
-            if (EstadoHospedaje != EstadoCabaña.Disponible) throw new InvalidOperationException("La cabaña esta fiera de servicio");
-
-            estadoHospedaje = EstadoCabaña.Ocupado;
-            Console.WriteLine("La Cabaña a sido reservada");
-        
+            base.RegistrarSalida(cantidad);
+            CancelarReservacion();
         }
 
-        public void CarcelarReservacion() 
+        public override double CalcularCostos(int cantidad)
         {
-            if (EstadoHospedaje != EstadoCabaña.Ocupado)
-                throw new InvalidOperationException("La cabaña no está ocupada.");
-
-            EstadoHospedaje = EstadoCabaña.Disponible;
-            Console.WriteLine("Reservación cancelada.");
-
+            if (cantidad < 0)
+            {
+                throw new ArgumentException("La cantidad ingresada es correcta.");
+            }
+            return _precioNoche * (cantidad == 0 ? 1 : cantidad);
         }
 
-
-
-
-
-
+        public override string FotoSugerida()
+        {
+            return "una foto de la entrada de la cabaña #" + _numeroCabaña;
+        }
     }
 }

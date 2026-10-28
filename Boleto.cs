@@ -6,71 +6,112 @@ using System.Threading.Tasks;
 
 namespace Actividad
 {
-     class Boleto
+    public class Boleto
     {
-        private string NumeroBoleto;
-        private double PrecioEntrada;
-        private string FechaEmision;
-        private Visitantes Cliente;
+        private string _numeroBoleto;
+        private double _precioEntrada;
+        private string _fechaEmision;
+        private Visitantes _cliente;
+        private bool _pagado = false;
 
         public Boleto(string numeroBoleto, double precioEntrada, string fechaEmision, Visitantes cliente)
         {
-            NumeroBoleto = numeroBoleto;
-            PrecioEntrada = precioEntrada;
-            FechaEmision = fechaEmision;
-            Cliente = cliente;
+            this.numeroBoleto = numeroBoleto;
+            this.precioEntrada = precioEntrada;
+            this.fechaEmision = fechaEmision;
+            this.cliente = cliente;
         }
 
         public string numeroBoleto
         {
-            get { return NumeroBoleto; }
-            set { NumeroBoleto = value; }
-
+            get { return _numeroBoleto; }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    Console.WriteLine("el numero de boleto no puede estar vacio.");
+                }
+                else
+                {
+                    _numeroBoleto = value.Trim();
+                }
+            }
         }
 
         public double precioEntrada
         {
-            get { return precioEntrada; }
-            set { precioEntrada = value < 0 ? throw new ArgumentException("El precio no es valido."): value; }
-        
+            get { return _precioEntrada; }
+            set
+            {
+                if (value < 0)
+                {
+                    Console.WriteLine("el precio de la entrada no puede ser negativo");
+                }
+                else
+                {
+                    _precioEntrada = value;
+                }
+            }
         }
 
-        public string fechaEmision 
+        public string fechaEmision
         {
-            get { return FechaEmision; }
-            set { FechaEmision = value; }
+            get { return _fechaEmision; }
+            set { _fechaEmision = value; }
         }
 
-
-        public Visitantes cliente 
+        public Visitantes cliente
         {
-            get { return cliente; }
-            set { cliente = value ??  throw new ArgumentException("El cliente debe estar ingresado"); }
-        
+            get { return _cliente; }
+            set
+            {
+                if (value == null)
+                {
+                    Console.WriteLine("el boleto debe pertenecer a un visitante.");
+                }
+                else
+                {
+                    _cliente = value;
+                }
+            }
         }
 
-        public double CalcularTotal() 
+        public bool pagado
         {
-            return precioEntrada;
-        
+            get { return _pagado; }
+            set { _pagado = value; }
         }
 
-
-
-        public void ImprimirComprobante(Parque parque) 
+        //Metodo para calcular el total a pagar por el boleto incluyendo las atracciones visitadas por el cliente.
+        public double CalcularTotal()
         {
-            Console.WriteLine("\n========== BOLETO ==========");
-            Console.WriteLine($"Numero de Boleto: { numeroBoleto}");
-            Console.WriteLine($"Visitante: {cliente.Nombre}");
-            Console.WriteLine($"Parque: {parque}");
-            Console.WriteLine($"Fecha: {FechaEmision}");
-            Console.WriteLine($"Total: ${CalcularTotal():0.00}");
-            Console.WriteLine("============================");
+            if (_cliente == null)
+            {
+                return _precioEntrada;
+            }
+            return _precioEntrada + _cliente.CalcularCostoAtracciones();
+        }
+
+        //Metodo para imprimir el comprobante del boleto incluyendo el precio de entrada y el total a pagar.
+        public void ImprimirComprobante(Parque parque)
+        {
+            Console.WriteLine("----------- COMPROBANTE -----------");
+            Console.WriteLine($"Boleto: {_numeroBoleto}  Fecha: {_fechaEmision}");
+            Console.WriteLine($"Visitante: {_cliente?.Nombre} (grupo de {_cliente?.VisitantesEnGrupo})");
+            Console.WriteLine($"Entrada al parque: ${_precioEntrada:0.00}");
+
+            if (_cliente != null)
+            {
+                for (int i = 0; i < _cliente.AtraccionesVisitadas.Count; i++)
+                {
+                    Atracciones at = _cliente.AtraccionesVisitadas[i];
+                    double costo = at.CalcularCostos(_cliente.VisitantesEnGrupo);
+                    Console.WriteLine($"  {at.Nombre}: ${costo:0.00}");
+                }
+            }
+
+            Console.WriteLine($"TOTAL A PAGAR: ${CalcularTotal():0.00}");
+            Console.WriteLine("----------------------------------------");
         }
     }
-
-       
-
-
-    
 }

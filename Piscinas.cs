@@ -6,109 +6,87 @@ using System.Threading.Tasks;
 
 namespace Actividad
 {
-    class Piscinas : Atracciones
+    public class Piscinas : Atracciones
     {
-        private double profundidadMetros;
-        private bool requiereTrajeBaño;
-        private int aforoActual;
+        private double _profundidadMetros;
+        private bool _requiereTrajeBano;
 
         public Piscinas(
             string id,
-            string Nombre,
-            int capacidadpersona,
-            EstadoActraccion estadoActraccion,
+            string nombre,
+            int capacidadPersona,
+            EstadoAtraccion estadoAtraccion,
             double profundidadMetros,
-            bool requiereTrajeBaño,
-            int aforoActual)
-            : base(id, Nombre, capacidadpersona, estadoActraccion)
+            bool requiereTrajeBano)
+            : base(id, nombre, capacidadPersona, estadoAtraccion)
         {
-            this.profundidadMetros = profundidadMetros;
-            this.requiereTrajeBaño = requiereTrajeBaño;
-            this.aforoActual = 0;
+            this.ProfundidadMetros = profundidadMetros;
+            this.RequiereTrajeBano = requiereTrajeBano;
         }
 
         public double ProfundidadMetros
         {
-            get { return profundidadMetros; }
+            get { return _profundidadMetros; }
             set
             {
-                if (value < 0)
-                    throw new ArgumentException("Profundidad inválida.");
-
-                profundidadMetros = value;
+                if (value <= 0)
+                {
+                    throw new ArgumentException("la profundidad debe ser mayor que cero.");
+                }
+                _profundidadMetros = value;
             }
         }
 
-        public bool RequiereTrajeBaño
+        public bool RequiereTrajeBano
         {
-            get { return requiereTrajeBaño; }
-            set { requiereTrajeBaño = value; }
-        }
-
-        public int AforoActual
-        {
-            get { return aforoActual; }
-            set
-            {
-                if (value < 0 || value > CapacidadPersona)
-                    throw new ArgumentException("Aforo inválido.");
-
-                aforoActual = value;
-            }
-        }
-
-        public override double CalcularCostos(int cantidad)
-        {
-            if (cantidad <= 0)
-                throw new ArgumentException(
-                    "Cantidad de personas inválida.");
-
-            if (aforoActual + cantidad > CapacidadPersona)
-            {
-                throw new ArgumentException(
-                    "No se puede ingresar: capacidad de aforo alcanzada.");
-            }
-
-            aforoActual += cantidad;
-
-            return 0.00;
+            get { return _requiereTrajeBano; }
+            set { _requiereTrajeBano = value; }
         }
 
         public override void MostrarInformacion()
         {
-            Console.WriteLine($"Nombre: {Nombre}");
-            Console.WriteLine($"Profundidad: {ProfundidadMetros} metros");
-            Console.WriteLine($"Requiere traje de baño: {RequiereTrajeBaño}");
-            Console.WriteLine($"Aforo actual: {AforoActual}");
-            Console.WriteLine($"Capacidad máxima: {CapacidadPersona}");
-            Console.WriteLine($"Estado: {EstadoAtraccion}");
+            base.MostrarInformacion();
+            string textoTraje = _requiereTrajeBano ? "si" : "no";
+            Console.WriteLine($"   Piscina de {_profundidadMetros} m de profundidad | Requiere traje de baño: {textoTraje}");
         }
 
-
-        public void RegistrarIngreso(int cantidad)
+        public override bool RegistrarIngreso(int cantidad)
         {
             if (cantidad <= 0)
             {
-                throw new ArgumentException(
-                    "La cantidad de personas debe ser mayor que cero.");
+                Console.WriteLine("La cantidad de personas debe ser mayor que cero.");
+                return false;
             }
 
-            if (aforoActual + cantidad > CapacidadPersona)
+            if (EstadoAtraccion != EstadoAtraccion.Disponible)
             {
-                throw new ArgumentException(
-                    "No se puede ingresar. El aforo máximo de la piscina se superaría.");
+                Console.WriteLine($"{Nombre} no esta disponible en este momento ({EstadoAtraccion}).");
+                return false;
             }
 
-            aforoActual += cantidad;
+            if (AforoActual + cantidad > CapacidadPersona)
+            {
+                Console.WriteLine($"No se puede ingresar a {Nombre}. porque la capacidad maxima es de: {CapacidadPersona}");
+                return false;
+            }
+
+            AforoActual += cantidad;
 
             Console.WriteLine("Ingreso registrado correctamente.");
             Console.WriteLine($"Personas que ingresaron: {cantidad}");
-            Console.WriteLine($"Aforo actual: {aforoActual}");
-            Console.WriteLine($"Capacidad máxima: {CapacidadPersona}");
+            Console.WriteLine($"Aforo actual: {AforoActual}");
+            Console.WriteLine($"Capacidad maxima: {CapacidadPersona}");
+            return true;
         }
 
+        public override string FotoSugerida()
+        {
+            return "una foto de la piscina mas grande con toboganes y con el agua cristalina";
+        }
 
-
+        public override double CalcularCostos(int cantidad)
+        {
+            return 0.00;
+        }
     }
-
 }
