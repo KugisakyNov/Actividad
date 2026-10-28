@@ -151,22 +151,62 @@ namespace Actividad
         static void RegistrarVisitante()
         {
             Console.WriteLine("--- Registrar Nuevo Visitante ---");
-            Console.Write("Nombre completo: ");
-            string nombre = Console.ReadLine();
+
+            string nombre;
+
+            do
+            {
+                Console.Write("Nombre completo: ");
+                nombre = Console.ReadLine();
+
+                if (string.IsNullOrWhiteSpace(nombre) ||
+                    !nombre.All(c => char.IsLetter(c) || c == ' '))
+                {
+                    Console.WriteLine("Error: El nombre solo debe contener letras.");
+                    nombre = "";
+                }
+
+            } while (string.IsNullOrWhiteSpace(nombre));
 
             Console.Write("DUI o Pasaporte: ");
             string dui = Console.ReadLine();
 
+            // Validar edad
+            int edad;
+
             Console.Write("Edad: ");
-            int edad = int.Parse(Console.ReadLine());
 
+            while (!int.TryParse(Console.ReadLine(), out edad) || edad < 0 || edad > 120)
+            {
+                Console.Write("Edad inválida. Ingrese una edad entre 0 y 120: ");
+            }
+
+            int grupo;
             Console.Write("Cantidad de personas en el grupo: ");
-            int grupo = int.Parse(Console.ReadLine());
+            while (!int.TryParse(Console.ReadLine(), out grupo) || grupo <= 0)
+            {
+                Console.Write("Debe ingresar un número mayor que 0: ");
+            }
 
-            Console.Write("¿Es extranjero? Presione 1 para (si), presione 2 para (no): ");
-            bool esExtranjero = Console.ReadLine() == "1";
+            int opcion;
+            Console.Write("¿Es extranjero? 1 = Sí, 2 = No: ");
 
-            visitanteActual = new Visitantes(dui, nombre, edad, grupo, esExtranjero);
+            while (!int.TryParse(Console.ReadLine(), out opcion) ||
+                   (opcion != 1 && opcion != 2))
+            {
+                Console.Write("Opción inválida. Digite 1 o 2: ");
+            }
+
+            bool esExtranjero = opcion == 1;
+
+            visitanteActual = new Visitantes(
+                dui,
+                nombre,
+                edad,
+                grupo,
+                esExtranjero
+            );
+
             visitanteActual.RegistrarLlegada();
         }
 
