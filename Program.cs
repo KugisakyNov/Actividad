@@ -6,23 +6,28 @@ using System.Threading.Tasks;
 
 namespace Actividad
 {
+    // enums del programa
     public enum TipoParque
     {
         Narural,
         Acuatico
     }
+
     public enum EstadoCabaña
     {
         Disponible,
         Ocupado,
         Mantenimiento
     }
+
     public enum TipoZonaVerde
     {
         Mirador,
         kiosko,
-        AreaColumpios
+        AreaColumpios,
+        AreaDescanso
     }
+
     public enum EstadoAtraccion
     {
         Disponible,
@@ -36,6 +41,7 @@ namespace Actividad
         Media,
         Alta
     }
+
     public enum EspecialidadGuia
     {
         FlorayFauna,
@@ -45,7 +51,7 @@ namespace Actividad
 
     internal class Program
     {
-        // Variables que se necesitan para que el programa funcione correctamente
+        // variables estaticas para guardar parques y visitantes
         static Parque parqueCerroVerde;
         static Parque parqueSihuatehuacan;
         static Visitantes visitanteActual = null;
@@ -53,35 +59,40 @@ namespace Actividad
 
         static void Main(string[] args)
         {
-            // 1. Parque Natural Cerro Verde
+            // creacion del parque cerro verde
             parqueCerroVerde = new Parque("Parque Natural Cerro Verde", TipoParque.Narural, "Santa Ana", "8:00 AM - 5:00 PM", 1.50);
             parqueCerroVerde.AbrirParque();
 
+            // creacion de atracciones para cerro verde
             Mirador miradorVolcanes = new Mirador("M-01", "Mirador Los Volcanes", 40, EstadoAtraccion.Disponible, 2030.0, "Volcan Izalco", "Madera y estructura de hierro");
             Sendero senderoFlores = new Sendero("S-01", "Sendero Las Flores", 25, EstadoAtraccion.Disponible, 2.5, DificultadSendero.Media, true);
             Cabañas cabanaCipres = new Cabañas("C-01", "Cabaña El Ciprés", 6, EstadoAtraccion.Disponible, 1, 2, 45.00, EstadoCabaña.Disponible);
 
+            // agregar atracciones al cerro verde
             parqueCerroVerde.AgregarAtraccion(miradorVolcanes);
             parqueCerroVerde.AgregarAtraccion(senderoFlores);
             parqueCerroVerde.AgregarAtraccion(cabanaCipres);
 
+            // creacion y asignacion del guia
             GuiaTuristico guiaCerro = new GuiaTuristico("G-101", "Marlon Osorio", EspecialidadGuia.senderismo, true);
             guiaCerro.AsignarRecorrido(senderoFlores);
 
-            // 2. Parque Recreativo Sihuatehuacan
-            parqueSihuatehuacan = new Parque( "Parque Recreativo Sihuatehuacan", TipoParque.Acuatico,"Santa Ana", "7:00 AM - 4:00 PM",1.50 );
+            // creacion del parque sihuatehuacan
+            parqueSihuatehuacan = new Parque("Parque Recreativo Sihuatehuacan", TipoParque.Acuatico, "Santa Ana", "7:00 AM - 4:00 PM", 1.50);
             parqueSihuatehuacan.AbrirParque();
 
+            // creacion de atracciones para sihuatehuacan
             Piscinas piscinaFamiliar = new Piscinas("P-01", "Piscina Grande Familiar", 50, EstadoAtraccion.Disponible, 1.6, true);
             Mirador juegosNinos = new Mirador("M-02", "zona recreativa de juegos en el area verde", 30, EstadoAtraccion.Disponible, 0.0, "Cancha y parque", "Hierro y plastico");
 
+            // agregar atracciones a sihuatehuacan
             parqueSihuatehuacan.AgregarAtraccion(piscinaFamiliar);
             parqueSihuatehuacan.AgregarAtraccion(juegosNinos);
 
             Console.WriteLine("\nPresiona cualquier tecla para ir al Menu...");
             Console.ReadKey();
 
-            
+            // ciclo para mostrar el menu hasta salir
             int opcion;
             do
             {
@@ -117,10 +128,11 @@ namespace Actividad
                         SimulacionAutomatica();
                         break;
                     case 0:
-                        Console.WriteLine("Terminando el programa. ¡Gracias por visitar los parques!");
+                        Console.WriteLine("Terminando el programa... " +
+                            "Gracias por visitar los parques!");
                         break;
                     default:
-                        Console.WriteLine("Opción no válida.");
+                        Console.WriteLine("Opción no valida.");
                         break;
                 }
 
@@ -133,21 +145,23 @@ namespace Actividad
             } while (opcion != 0);
         }
 
+        // metodo para imprimir el menu
         static void MostrarMenu()
         {
             Console.Clear();
             Console.WriteLine("------------------- PARQUES CERRO VERDE Y SIHUATEHUACÁN -------------------");
             Console.WriteLine("1. Registrar la llegada de un visitante");
-            Console.WriteLine("2. Entrar a un parque (comprar boleto)");
+            Console.WriteLine("2. Entrar a un parque");
             Console.WriteLine("3. Ver las atracciones del parque");
-            Console.WriteLine("4. Visitar una atracción");
-            Console.WriteLine("5. Tomar una foto (reto extra)");
+            Console.WriteLine("4. Visitar una atraccion");
+            Console.WriteLine("5. Tomar una foto");
             Console.WriteLine("6. Pagar");
             Console.WriteLine("7. Salir del parque");
-            Console.WriteLine("8. Ver una simulación automática completa");
+            Console.WriteLine("8. Ver una simulacion automatica completa");
             Console.WriteLine("0. Terminar el programa");
         }
 
+        // metodo para pedir datos y registrar visitante
         static void RegistrarVisitante()
         {
             Console.WriteLine("--- Registrar Nuevo Visitante ---");
@@ -171,7 +185,6 @@ namespace Actividad
             Console.Write("DUI o Pasaporte: ");
             string dui = Console.ReadLine();
 
-            // Validar edad
             int edad;
 
             Console.Write("Edad: ");
@@ -210,6 +223,7 @@ namespace Actividad
             visitanteActual.RegistrarLlegada();
         }
 
+        // metodo para elegir parque y comprar boleto
         static void EntrarAlParque()
         {
             if (visitanteActual == null)
@@ -228,6 +242,7 @@ namespace Actividad
             visitanteActual.EntrarAlParque(parqueSeleccionado);
         }
 
+        // metodo para listar atracciones
         static void VerAtracciones()
         {
             if (parqueSeleccionado == null)
@@ -239,6 +254,7 @@ namespace Actividad
             parqueSeleccionado.ListarAtracciones();
         }
 
+        // metodo para visitar una atraccion
         static void VisitarAtraccion()
         {
             if (visitanteActual == null || parqueSeleccionado == null)
@@ -267,6 +283,7 @@ namespace Actividad
             }
         }
 
+        // metodo para tomar foto a una atraccion
         static void TomarFoto()
         {
             if (visitanteActual == null || parqueSeleccionado == null)
@@ -275,7 +292,7 @@ namespace Actividad
                 return;
             }
 
-            Console.WriteLine("Selecciona la atracción para la foto:");
+            Console.WriteLine("Seleccione la atraccion para la foto:");
             List<Atracciones> lista = parqueSeleccionado.ListaAtracciones;
             for (int i = 0; i < lista.Count; i++)
             {
@@ -295,6 +312,7 @@ namespace Actividad
             }
         }
 
+        // metodo para procesar el pago del visitante
         static void Pagar()
         {
             if (visitanteActual == null || parqueSeleccionado == null)
@@ -306,58 +324,89 @@ namespace Actividad
             parqueSeleccionado.ProcesarPago(visitanteActual);
         }
 
+        // metodo para salir del parque
         static void SalirDelParque()
         {
-            if (visitanteActual == null)
+            if (visitanteActual == null || parqueSeleccionado == null)
             {
-                Console.WriteLine("No hay visitante registrado.");
+                Console.WriteLine("No hay visitante dentro de ningun parque.");
                 return;
             }
 
-            visitanteActual.SalirDelParque();
-            parqueSeleccionado = null;
+            // solo si pudo salir limpiamos el parque seleccionado
+            bool pudoSalir = visitanteActual.SalirDelParque();
+            if (pudoSalir)
+            {
+                parqueSeleccionado = null;
+            }
         }
 
+        // simulacion automatica de recorridos
         static void SimulacionAutomatica()
         {
             Console.WriteLine("----------------- INICIANDO SIMULACIÓN AUTOMÁTICA -----------------\n");
 
-            // Recorrido 1: Samuel de Luque en Sihuatehuacán
-            Visitantes samuel = new Visitantes("05891234-8", "Samuel de Luque", 26, 1, false);
+            // recorrido uno vanessa lara en cerro verde
+            Console.WriteLine("--- RECORRIDO 1 CERRO VERDE ---");
+            Visitantes vanessa = new Visitantes("05123456-7", "Vanessa Lara", 24, 2, false);
+            vanessa.RegistrarLlegada();
+            vanessa.EntrarAlParque(parqueCerroVerde);
+
+            // obtener atracciones de cerro verde
+            Atracciones mirador = parqueCerroVerde.GetAtraccion(0);
+            Atracciones sendero = parqueCerroVerde.GetAtraccion(1);
+            Atracciones cabana = parqueCerroVerde.GetAtraccion(2);
+
+            // vanessa visita el mirador
+            vanessa.VisitarAtraccion(mirador);
+            Console.WriteLine("Disfruta de la vista hacia el volcan desde " + mirador.Nombre);
+
+            // vanessa visita el sendero
+            vanessa.VisitarAtraccion(sendero);
+            Console.WriteLine("Camina por el " + sendero.Nombre);
+
+            // vanessa visita y reserva cabana
+            vanessa.VisitarAtraccion(cabana);
+            Console.WriteLine("Se hospeda en la " + cabana.Nombre);
+
+            // vanessa toma foto polimorfica
+            vanessa.TomarFoto(mirador);
+
+            // pago y salida de vanessa
+            Console.WriteLine();
+            parqueCerroVerde.ProcesarPago(vanessa);
+            vanessa.SalirDelParque();
+
+            Console.WriteLine("\n-------------------------------------------------------------------\n");
+
+            // recorrido dos samuel de luque en el parque sihuatehuacan
+            Console.WriteLine("--- RECORRIDO 2 SIHUATEHUACAN ---");
+            Visitantes samuel = new Visitantes("P98765432", "Samuel de Luque", 35, 1, true);
+            samuel.RegistrarLlegada();
             samuel.EntrarAlParque(parqueSihuatehuacan);
 
+            // obtener atracciones de sihuatehuacan
             Atracciones piscina = parqueSihuatehuacan.GetAtraccion(0);
             Atracciones juegos = parqueSihuatehuacan.GetAtraccion(1);
 
+            // samuel visita la piscina
             samuel.VisitarAtraccion(piscina);
             if (piscina is Piscinas p)
             {
-                Console.WriteLine("Te metes a la " + piscina.Nombre + ". ¡Esta en la piscina que tiene " + p.ProfundidadMetros + " m de profundidad!");
+                Console.WriteLine("se metes a la " + piscina.Nombre + " que tiene " + p.ProfundidadMetros + " m de profundidad");
             }
 
+            // samuel visita area de juegos
             samuel.VisitarAtraccion(juegos);
-            Console.WriteLine("Disfrutas de " + juegos.Nombre + ".");
+            Console.WriteLine("Disfruta de " + juegos.Nombre);
 
+            // samuel toma foto de la piscina
             samuel.TomarFoto(piscina);
 
+            // pago y salida de samuel
             Console.WriteLine();
             parqueSihuatehuacan.ProcesarPago(samuel);
             samuel.SalirDelParque();
-
-            // Recorrido 2: Grupo escolar donde se supera el aforo
-            Console.WriteLine("\n--- Recorrido 2: un grupo escolar (se supera el aforo) ---");
-            Visitantes grupoEscolar = new Visitantes("01234567-9", "Maria Rosa", 35, 45, false);
-            grupoEscolar.RegistrarLlegada();
-            grupoEscolar.EntrarAlParque(parqueSihuatehuacan);
-
-            grupoEscolar.VisitarAtraccion(piscina);
-
-            grupoEscolar.VisitarAtraccion(juegos);
-            Console.WriteLine("Disfrutas de " + juegos.Nombre + ".");
-
-            Console.WriteLine();
-            parqueSihuatehuacan.ProcesarPago(grupoEscolar);
-            grupoEscolar.SalirDelParque();
 
             Console.WriteLine("\n----------------- FIN DE LA SIMULACIÓN -----------------");
         }

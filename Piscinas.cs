@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 
 namespace Actividad
 {
+    // subclase piscinas que hereda de atracciones
     public class Piscinas : Atracciones
     {
+        // atributos privados con guion bajo
         private double _profundidadMetros;
         private bool _requiereTrajeBano;
 
+        // constructor que pasa los datos base a la clase padre
         public Piscinas(
             string id,
             string nombre,
@@ -24,6 +27,7 @@ namespace Actividad
             this.RequiereTrajeBano = requiereTrajeBano;
         }
 
+        // propiedad profundidad con validacion
         public double ProfundidadMetros
         {
             get { return _profundidadMetros; }
@@ -31,25 +35,32 @@ namespace Actividad
             {
                 if (value <= 0)
                 {
-                    throw new ArgumentException("la profundidad debe ser mayor que cero.");
+                    Console.WriteLine("error la profundidad debe ser mayor que cero");
+                    _profundidadMetros = 1.0;
                 }
-                _profundidadMetros = value;
+                else
+                {
+                    _profundidadMetros = value;
+                }
             }
         }
 
+        // propiedad requiere traje de bano
         public bool RequiereTrajeBano
         {
             get { return _requiereTrajeBano; }
             set { _requiereTrajeBano = value; }
         }
 
+        // metodo para mostrar informacion de la piscina
         public override void MostrarInformacion()
         {
             base.MostrarInformacion();
             string textoTraje = _requiereTrajeBano ? "si" : "no";
-            Console.WriteLine($"   Piscina de {_profundidadMetros} m de profundidad | Requiere traje de baño: {textoTraje}");
+            Console.WriteLine($"Piscina de {_profundidadMetros} m de profundidad | Requiere traje de baño: {textoTraje}");
         }
 
+        // metodo para registrar ingreso validando capacidad
         public override bool RegistrarIngreso(int cantidad)
         {
             if (cantidad <= 0)
@@ -79,12 +90,14 @@ namespace Actividad
             return true;
         }
 
+        // metodo para sugerir foto de la piscina
         public override string FotoSugerida()
         {
             return "una foto de la piscina mas grande con toboganes y con el agua cristalina";
         }
 
-        public override double CalcularCostos(int cantidad)
+        // metodo abstracto para calcular el costo de la piscina, que en este caso es gratuito
+        public override double CalcularCosto(int cantidad)
         {
             return 0.00;
         }

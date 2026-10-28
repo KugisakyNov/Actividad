@@ -6,85 +6,122 @@ using System.Threading.Tasks;
 
 namespace Actividad
 {
+    // clase concreta para modelar los parques
     public class Parque
     {
-        protected string Nombre;
-        protected TipoParque tipoParque;
-        protected string Ubicacion;
-        protected string HorarioAtencion;
-        protected double PrecioEntradaBase;
-        private bool abierto = false;
-        protected List<Atracciones> listaAtracciones;
+        // atributos privados 
+        private string _nombre;
+        private TipoParque _tipoParque;
+        private string _ubicacion;
+        private string _horarioAtencion;
+        private double _precioEntradaBase;
+        private bool _abierto;
+        private List<Atracciones> _listaAtracciones;
+        private int _boletosVendidos;
+        private double _totalRecaudado;
 
-        // Variables de control para lo de las ventas
-        private int boletosVendidos = 0;
-        private double totalRecaudado = 0.0;
-
+        // constructor que inicializa los datos del parque y la lista
         public Parque(string nombre, TipoParque tipoParque, string ubicacion, string horarioAtencion, double precioEntradaBase)
         {
-            this.Nombre = nombre;
-            this.tipoParque = tipoParque;
-            this.Ubicacion = ubicacion;
-            this.HorarioAtencion = horarioAtencion;
-            this.PrecioEntradaBase = precioEntradaBase;
-            this.listaAtracciones = new List<Atracciones>();
+            this.NombreParque = nombre;
+            this.TipoParque = tipoParque;
+            this.UbicacionParque = ubicacion;
+            this.HorarioAtencionParque = horarioAtencion;
+            this.PrecioEntradaBaseParque = precioEntradaBase;
+            this._abierto = false;
+            this._listaAtracciones = new List<Atracciones>();
+            this._boletosVendidos = 0;
+            this._totalRecaudado = 0.0;
         }
 
+        // propiedad nombre del parque con validacion sencilla
         public string NombreParque
         {
-            get { return Nombre; }
-            set { Nombre = string.IsNullOrWhiteSpace(value) ? throw new ArgumentException("Ingresar Nombre") : value; }
+            get { return _nombre; }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    Console.WriteLine("el nombre del parque no puede estar vacio");
+                    _nombre = "sin nombre";
+                }
+                else
+                {
+                    _nombre = value.Trim();
+                }
+            }
         }
 
+        // propiedad para el tipo de parque
         public TipoParque TipoParque
         {
-            get { return tipoParque; }
-            set { tipoParque = value; }
+            get { return _tipoParque; }
+            set { _tipoParque = value; }
         }
 
+        // propiedad para la ubicacion del parque
         public string UbicacionParque
         {
-            get { return Ubicacion; }
+            get { return _ubicacion; }
+            set { _ubicacion = value; }
         }
 
+        // propiedad para el horario de atencion
         public string HorarioAtencionParque
         {
-            get { return HorarioAtencion; }
-            set { HorarioAtencion = value; }
+            get { return _horarioAtencion; }
+            set { _horarioAtencion = value; }
         }
 
+        // propiedad para el precio base validado
         public double PrecioEntradaBaseParque
         {
-            get { return PrecioEntradaBase; }
-            set { PrecioEntradaBase = value < 0 ? throw new ArgumentException("Precio no es valido") : value; }
+            get { return _precioEntradaBase; }
+            set
+            {
+                if (value < 0)
+                {
+                    Console.WriteLine("el precio de entrada base no puede ser negativo");
+                    _precioEntradaBase = 1.50;
+                }
+                else
+                {
+                    _precioEntradaBase = value;
+                }
+            }
         }
 
+        // propiedad para comprobar si el parque esta abierto
         public bool Abierto
         {
-            get { return abierto; }
+            get { return _abierto; }
         }
 
+        // propiedad para acceder a la coleccion de atracciones
         public List<Atracciones> ListaAtracciones
         {
-            get { return listaAtracciones; }
+            get { return _listaAtracciones; }
         }
 
+        // metodo para mostrar los datos generales del parque
         public virtual void MostrarInformacion()
         {
-            Console.WriteLine($"Nombre del Parque: {Nombre}");
-            Console.WriteLine($"Tipo de Parque: {tipoParque}");
-            Console.WriteLine($"Ubicación: {Ubicacion}");
-            Console.WriteLine($"Horario de Atención: {HorarioAtencion}");
-            Console.WriteLine($"Precio de Entrada Base: {PrecioEntradaBase:C}");
+            Console.WriteLine($"Nombre del Parque: {_nombre}");
+            Console.WriteLine($"Tipo de Parque: {_tipoParque}");
+            Console.WriteLine($"Ubicacion: {_ubicacion}");
+            Console.WriteLine($"Horario de Atencion: {_horarioAtencion}");
+            Console.WriteLine($"Precio de Entrada Base: ${_precioEntradaBase:0.00}");
             Console.WriteLine("Lista de Atracciones:");
         }
 
+        // metodo para abrir las puertas del parque
         public void AbrirParque()
         {
-            abierto = true;
-            Console.WriteLine(Nombre + " ya abrio sus puertas. Horario: " + HorarioAtencion);
+            _abierto = true;
+            Console.WriteLine(_nombre + " ya abrio sus puertas. Horario: " + _horarioAtencion);
         }
 
+        // metodo para agregar atracciones a la coleccion del parque
         public void AgregarAtraccion(Atracciones a)
         {
             if (a == null)
@@ -93,44 +130,48 @@ namespace Actividad
             }
             else
             {
-                listaAtracciones.Add(a);
+                _listaAtracciones.Add(a);
             }
         }
 
+        // metodo para obtener el total de atracciones registradas
         public int GetCantidadAtracciones()
         {
-            return listaAtracciones.Count;
+            return _listaAtracciones.Count;
         }
 
+        // metodo para obtener una atraccion por su indice
         public Atracciones GetAtraccion(int posicion)
         {
-            if (posicion < 0 || posicion >= listaAtracciones.Count)
+            if (posicion < 0 || posicion >= _listaAtracciones.Count)
             {
                 return null;
             }
-            return listaAtracciones[posicion];
+            return _listaAtracciones[posicion];
         }
 
+        // metodo para listar atracciones registradas
         public void ListarAtracciones()
         {
-            Console.WriteLine($"\n--- Atracciones del parque {Nombre} ---");
+            Console.WriteLine($"\n--- Atracciones del parque {_nombre} ---");
 
-            if (listaAtracciones.Count == 0)
+            if (_listaAtracciones.Count == 0)
             {
                 Console.WriteLine("No hay atracciones registradas.");
                 return;
             }
 
-            foreach (Atracciones atraccion in listaAtracciones)
+            foreach (Atracciones atraccion in _listaAtracciones)
             {
                 Console.WriteLine("-----------------------------");
                 atraccion.MostrarInformacion();
             }
         }
 
+        // metodo para calcular el precio segun categoria de visitante
         public double CalcularPrecioEntrada(Visitantes v)
         {
-            double precio = PrecioEntradaBase * v.VisitantesEnGrupo;
+            double precio = _precioEntradaBase * v.VisitantesEnGrupo;
             if (v.EsExtranjero)
             {
                 precio = precio * 2;
@@ -138,33 +179,60 @@ namespace Actividad
             return precio;
         }
 
+        // metodo para vender el boleto cobrando la entrada inmediatamente
         public Boleto VenderBoleto(Visitantes v)
         {
-            boletosVendidos = boletosVendidos + 1;
-            string numero = "B-" + (100 + boletosVendidos);
-            string fecha = DateTime.Now.ToString("dd/MM/yyyy HH:mm");//de esta forma captura la fecha y hora exacta en que se vendio el boleto
-            Boleto b = new Boleto(numero, CalcularPrecioEntrada(v), fecha, v);
+            _boletosVendidos = _boletosVendidos + 1;
+            string numero = "B-" + (100 + _boletosVendidos);
+            string fecha = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
+
+            double costoEntrada = CalcularPrecioEntrada(v);
+            Boleto b = new Boleto(numero, costoEntrada, fecha, v);
+
+            // se marca pagada la entrada y se suma a la recaudacion del parque
+            b.Pagado = true;
+            _totalRecaudado = _totalRecaudado + costoEntrada;
+
             return b;
         }
 
+        // metodo para procesar pagos pendientes de servicios extra como cabañas
         public void ProcesarPago(Visitantes v)
         {
             Boleto b = v.Boleto;
             if (b == null)
             {
-                Console.WriteLine("El visitante todavía no tiene boleto.");
+                Console.WriteLine("El visitante todavia no tiene boleto.");
+                return;
             }
-            else if (b.pagado)
+
+            double costoExtras = v.CalcularCostoAtracciones();
+
+            if (costoExtras == 0)
             {
-                Console.WriteLine("Este boleto ya fue pagado.");
+                Console.WriteLine("No tienes pagos pendientes. Todas las atracciones visitadas estan cubiertas con tu entrada general.");
+                return;
             }
-            else
+
+            // comprobante solo por los costos adicionales
+            Console.WriteLine("----------- PAGO DE SERVICIOS ADICIONALES -----------");
+            Console.WriteLine("Boleto: " + b.NumeroBoleto);
+            Console.WriteLine("Visitante: " + v.Nombre);
+            for (int i = 0; i < v.AtraccionesVisitadas.Count; i++)
             {
-                b.ImprimirComprobante(this);
-                totalRecaudado = totalRecaudado + b.CalcularTotal();
-                b.pagado = true;
-                Console.WriteLine("Pago recibido. ¡Gracias, " + v.Nombre + "!");
+                Atracciones at = v.AtraccionesVisitadas[i];
+                double costo = at.CalcularCosto(v.VisitantesEnGrupo);
+                if (costo > 0)
+                {
+                    Console.WriteLine("  " + at.Nombre + ": $" + costo.ToString("0.00"));
+                }
             }
+            Console.WriteLine("TOTAL EXTRA A PAGAR: $" + costoExtras.ToString("0.00"));
+            Console.WriteLine("-----------------------------------------------------");
+
+            _totalRecaudado = _totalRecaudado + costoExtras;
+            v.MarcarExtrasPagados();
+            Console.WriteLine("Pago adicional recibido con exito. Gracias por tu pago, " + v.Nombre + "!");
         }
     }
 }

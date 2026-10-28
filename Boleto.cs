@@ -6,30 +6,36 @@ using System.Threading.Tasks;
 
 namespace Actividad
 {
+    // clase concreta para modelar el boleto de entrada y pago
     public class Boleto
     {
+        // atributos privados
         private string _numeroBoleto;
         private double _precioEntrada;
         private string _fechaEmision;
         private Visitantes _cliente;
-        private bool _pagado = false;
+        private bool _pagado;
 
+        // constructor que inicializa los datos del boleto
         public Boleto(string numeroBoleto, double precioEntrada, string fechaEmision, Visitantes cliente)
         {
-            this.numeroBoleto = numeroBoleto;
-            this.precioEntrada = precioEntrada;
-            this.fechaEmision = fechaEmision;
-            this.cliente = cliente;
+            this.NumeroBoleto = numeroBoleto;
+            this.PrecioEntrada = precioEntrada;
+            this.FechaEmision = fechaEmision;
+            this.Cliente = cliente;
+            this._pagado = false;
         }
 
-        public string numeroBoleto
+        // propiedad numero de boleto con validacion sencilla
+        public string NumeroBoleto
         {
             get { return _numeroBoleto; }
             set
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
-                    Console.WriteLine("el numero de boleto no puede estar vacio.");
+                    Console.WriteLine("el numero de boleto no puede estar vacio");
+                    _numeroBoleto = "B-000";
                 }
                 else
                 {
@@ -38,7 +44,8 @@ namespace Actividad
             }
         }
 
-        public double precioEntrada
+        // propiedad precio de entrada sin permitir valores negativos
+        public double PrecioEntrada
         {
             get { return _precioEntrada; }
             set
@@ -46,6 +53,7 @@ namespace Actividad
                 if (value < 0)
                 {
                     Console.WriteLine("el precio de la entrada no puede ser negativo");
+                    _precioEntrada = 0.0;
                 }
                 else
                 {
@@ -54,20 +62,22 @@ namespace Actividad
             }
         }
 
-        public string fechaEmision
+        // propiedad para la fecha y hora de emision
+        public string FechaEmision
         {
             get { return _fechaEmision; }
             set { _fechaEmision = value; }
         }
 
-        public Visitantes cliente
+        // propiedad para asociar el cliente visitante
+        public Visitantes Cliente
         {
             get { return _cliente; }
             set
             {
                 if (value == null)
                 {
-                    Console.WriteLine("el boleto debe pertenecer a un visitante.");
+                    Console.WriteLine("el boleto debe pertenecer a un visitante");
                 }
                 else
                 {
@@ -76,13 +86,14 @@ namespace Actividad
             }
         }
 
-        public bool pagado
+        // propiedad para el estado de pago del boleto
+        public bool Pagado
         {
             get { return _pagado; }
             set { _pagado = value; }
         }
 
-        //Metodo para calcular el total a pagar por el boleto incluyendo las atracciones visitadas por el cliente.
+        // metodo para calcular el total sumando entrada y atracciones
         public double CalcularTotal()
         {
             if (_cliente == null)
@@ -92,7 +103,7 @@ namespace Actividad
             return _precioEntrada + _cliente.CalcularCostoAtracciones();
         }
 
-        //Metodo para imprimir el comprobante del boleto incluyendo el precio de entrada y el total a pagar.
+        // metodo para imprimir el comprobante detallado
         public void ImprimirComprobante(Parque parque)
         {
             Console.WriteLine("----------- COMPROBANTE -----------");
@@ -105,8 +116,8 @@ namespace Actividad
                 for (int i = 0; i < _cliente.AtraccionesVisitadas.Count; i++)
                 {
                     Atracciones at = _cliente.AtraccionesVisitadas[i];
-                    double costo = at.CalcularCostos(_cliente.VisitantesEnGrupo);
-                    Console.WriteLine($"  {at.Nombre}: ${costo:0.00}");
+                    double costo = at.CalcularCosto(_cliente.VisitantesEnGrupo);
+                    Console.WriteLine($"{at.Nombre}: ${costo:0.00}");
                 }
             }
 

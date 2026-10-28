@@ -6,23 +6,26 @@ using System.Threading.Tasks;
 
 namespace Actividad
 {
+    // clase concreta para modelar al guia turistico del parque
     public class GuiaTuristico
     {
+        // atributos privados 
         private string _carnetGuia;
-        private string _nombreGuia;
+        private string _nombre;
         private EspecialidadGuia _especialidad;
         private bool _estaDisponible;
         private Sendero _senderoAsignado;
 
-        public GuiaTuristico(string carnetGuia, string nombreGuia, EspecialidadGuia especialidad, bool estaDisponible)
+        // constructor para inicializar los datos del guia
+        public GuiaTuristico(string carnetGuia, string nombre, EspecialidadGuia especialidad, bool estaDisponible)
         {
-            CarnetGuia = carnetGuia;
-            NombreGuia = nombreGuia;
-            Especialidad = especialidad;
-            EstaDisponible = estaDisponible;
+            this.CarnetGuia = carnetGuia;
+            this.Nombre = nombre;
+            this.Especialidad = especialidad;
+            this.EstaDisponible = estaDisponible;
         }
 
-        // Propiedades con getter y setter publicas asi lo haremos para el resto de clases 
+        // propiedad carnet del guia con validacion sencilla
         public string CarnetGuia
         {
             get { return _carnetGuia; }
@@ -30,7 +33,8 @@ namespace Actividad
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
-                    Console.WriteLine("el carnet del guia no puede estar vacio.");
+                    Console.WriteLine("el carnet del guia no puede estar vacio");
+                    _carnetGuia = "sin carnet";
                 }
                 else
                 {
@@ -39,45 +43,50 @@ namespace Actividad
             }
         }
 
-        public string NombreGuia
+        // propiedad nombre del guia validada
+        public string Nombre
         {
-            get { return _nombreGuia; }
+            get { return _nombre; }
             set
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
-                    Console.WriteLine("el nombre del guia no puede estar vacio.");
+                    Console.WriteLine("el nombre del guia no puede estar vacio");
+                    _nombre = "sin nombre";
                 }
                 else
                 {
-                    _nombreGuia = value.Trim();
+                    _nombre = value.Trim();
                 }
             }
         }
 
+        // propiedad especialidad del guia
         public EspecialidadGuia Especialidad
         {
             get { return _especialidad; }
             set { _especialidad = value; }
         }
 
+        // propiedad para verificar si esta libre
         public bool EstaDisponible
         {
             get { return _estaDisponible; }
             set { _estaDisponible = value; }
         }
 
+        // propiedad de solo lectura para el sendero asignado
         public Sendero SenderoAsignado
         {
             get { return _senderoAsignado; }
         }
 
-        //Metodo para asignar un recorrido al guia turistico
+        // metodo para asignar un recorrido al sendero 
         public void AsignarRecorrido(Sendero sendero)
         {
             if (!_estaDisponible)
             {
-                Console.WriteLine("El guia " + _nombreGuia + " ya esta ocupado en otro recorrido.");
+                Console.WriteLine("El guia " + _nombre + " ya esta ocupado en otro recorrido.");
             }
             else if (sendero == null)
             {
@@ -86,23 +95,22 @@ namespace Actividad
             else
             {
                 _senderoAsignado = sendero;
-                sendero.SetGuia(this);
+                sendero.GuiaAsignado = this;
                 _estaDisponible = false;
-                Console.WriteLine("El guia " + _nombreGuia + " fue asignado al sendero " + sendero.Nombre + ".");
+                Console.WriteLine("El guia " + _nombre + " fue asignado al sendero " + sendero.Nombre + ".");
             }
         }
 
-
-        //Metoddo para finalizar el recorrido y liberar al guia
+        // metodo para terminar el recorrido y liberar al guia
         public void FinalizarRecorrido()
         {
             if (_senderoAsignado != null)
             {
-                _senderoAsignado.SetGuia(null);
+                _senderoAsignado.GuiaAsignado = null;
                 _senderoAsignado = null;
             }
             _estaDisponible = true;
-            Console.WriteLine("El guia " + _nombreGuia + " termino su recorrido y ya esta disponible.");
+            Console.WriteLine("El guia " + _nombre + " termino su recorrido y ya esta disponible.");
         }
     }
 }

@@ -6,16 +6,17 @@ using System.Threading.Tasks;
 
 namespace Actividad
 {
+    // clase abstracta base para las atracciones
     public abstract class Atracciones
     {
-        // Campos de respaldo privados/protegidos con guion bajo
-        protected string _id;
-        protected string _nombre;
-        protected int _capacidadPersona;
-        protected int _aforoActual;
-        protected EstadoAtraccion _estadoAtraccion;
+        // atributos privados con guion bajo
+        private string _id;
+        private string _nombre;
+        private int _capacidadPersona;
+        private int _aforoActual;
+        private EstadoAtraccion _estadoAtraccion;
 
-        // Constructor
+        // constructor que inicializa los valores
         protected Atracciones(string id, string nombre, int capacidadPersona, EstadoAtraccion estadoAtraccion)
         {
             this.Id = id;
@@ -25,25 +26,61 @@ namespace Actividad
             this._aforoActual = 0;
         }
 
-        // Propiedades públicas con validación
+        // propiedad id con validacion sencilla sin excepciones
         public string Id
         {
             get { return _id; }
-            set { _id = string.IsNullOrWhiteSpace(value) ? throw new ArgumentException("Tiene que ingresar ID") : value; }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    Console.WriteLine("error debe ingresar un id valido");
+                    _id = "sin id";
+                }
+                else
+                {
+                    _id = value;
+                }
+            }
         }
 
+        // propiedad nombre con validacion sencilla
         public string Nombre
         {
             get { return _nombre; }
-            set { _nombre = string.IsNullOrWhiteSpace(value) ? throw new ArgumentException("Tiene que ingresar Nombre") : value; }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    Console.WriteLine("error debe ingresar un nombre valido");
+                    _nombre = "sin nombre";
+                }
+                else
+                {
+                    _nombre = value;
+                }
+            }
         }
 
+        // propiedad capacidad con validacion sin lanzar excepciones
         public int CapacidadPersona
         {
             get { return _capacidadPersona; }
-            set { _capacidadPersona = value < 0 ? throw new ArgumentException("Capacidad no valida") : value; }
+            set
+            {
+                if (value < 0)
+                {
+                    Console.WriteLine("error la capacidad no puede ser negativa");
+                    _capacidadPersona = 0;
+                }
+                else
+                {
+                    _capacidadPersona = value;
+                }
+            }
         }
 
+        // propiedad aforo actual que controla los limites de capacidad
         public int AforoActual
         {
             get { return _aforoActual; }
@@ -51,7 +88,7 @@ namespace Actividad
             {
                 if (value < 0 || value > _capacidadPersona)
                 {
-                    Console.WriteLine($"el aforo debe estar entre 0 y {_capacidadPersona}.");
+                    Console.WriteLine("el aforo no puede ser menor a cero ni superar la capacidad");
                 }
                 else
                 {
@@ -60,31 +97,34 @@ namespace Actividad
             }
         }
 
+        // propiedad estado de la atraccion
         public EstadoAtraccion EstadoAtraccion
         {
             get { return _estadoAtraccion; }
             set { _estadoAtraccion = value; }
         }
 
-        // Metodo para mostrar informacion de la atraccion
+        // metodo para mostrar los datos de la atraccion
         public virtual void MostrarInformacion()
         {
-            Console.WriteLine($"ID: {Id}");
-            Console.WriteLine($"Nombre: {Nombre}");
-            Console.WriteLine($"Capacidad de personas: {CapacidadPersona}");
-            Console.WriteLine($"Aforo actual: {AforoActual}");
-            Console.WriteLine($"Estado de la atraccion: {EstadoAtraccion}");
+            Console.WriteLine("ID: " + _id);
+            Console.WriteLine("Nombre: " + _nombre);
+            Console.WriteLine("Capacidad de personas: " + _capacidadPersona);
+            Console.WriteLine("Aforo actual: " + _aforoActual);
+            Console.WriteLine("Estado de la atraccion: " + _estadoAtraccion);
         }
 
-        public abstract double CalcularCostos(int cantidad);
+        // metodo abstracto para calcular el costo en las clases hijas
+        public abstract double CalcularCosto(int cantidad);
 
+        // metodo para actualizar el estado operativo
         public void ActualizarEstado(EstadoAtraccion nuevoEstado)
         {
-            EstadoAtraccion = nuevoEstado;
-            Console.WriteLine($"El estado de {Nombre} se actualizo a {EstadoAtraccion}.");
+            _estadoAtraccion = nuevoEstado;
+            Console.WriteLine("El estado de " + _nombre + " se actualizo a " + _estadoAtraccion);
         }
 
-        // metodo para registrar ingreso de personas a la atraccion
+        // metodo para registrar ingreso y comprobar aforo maximo
         public virtual bool RegistrarIngreso(int cantidad)
         {
             if (cantidad <= 0)
@@ -93,16 +133,16 @@ namespace Actividad
                 return false;
             }
 
-            if (EstadoAtraccion != EstadoAtraccion.Disponible)
+            if (_estadoAtraccion != EstadoAtraccion.Disponible)
             {
-                Console.WriteLine($"{Nombre} no esta disponible en este momento ({EstadoAtraccion}).");
+                Console.WriteLine(_nombre + " no esta disponible en este momento " + _estadoAtraccion + ".");
                 return false;
             }
 
             if (_aforoActual + cantidad > _capacidadPersona)
             {
                 int espacios = _capacidadPersona - _aforoActual;
-                Console.WriteLine($"AFORO SUPERADO en {Nombre}: solo quedan {espacios} espacios y se intentan ingresar {cantidad}, puede esperar que se retiren algunas personas.");
+                Console.WriteLine("AFORO ESTA SIENDO SUPERADO en " + _nombre + ": solo quedan " + espacios + " espacios y se intentan ingresar " + cantidad + ", puede esperar que se retiren algunas personas.");
                 return false;
             }
 
@@ -110,6 +150,7 @@ namespace Actividad
             return true;
         }
 
+        // metodo para restar personas al salir
         public virtual void RegistrarSalida(int cantidad)
         {
             _aforoActual -= cantidad;
@@ -119,9 +160,10 @@ namespace Actividad
             }
         }
 
+        // metodo virtual para sugerir foto segun la atraccion
         public virtual string FotoSugerida()
         {
-            return "una foto del lugar: " + Nombre;
+            return "una foto del lugar: " + _nombre;
         }
     }
 }

@@ -6,101 +6,99 @@ using System.Threading.Tasks;
 
 namespace Actividad
 {
-    public class Sendero: Atracciones
+    // subclase sendero que hereda de atracciones
+    public class Sendero : Atracciones
     {
-        private double DistanciaKM { get; set; }
-        private DificultadSendero Dificultad;
-        private bool RequiereGuia = false;
-        private GuiaTuristico guiaAsignado; 
+        // atributos privados con guion bajo
+        private double _distanciaKm;
+        private DificultadSendero _dificultad;
+        private bool _requiereGuia;
+        private GuiaTuristico _guiaAsignado;
 
-        public Sendero(string id, string nombre, int capacidadpersona, EstadoAtraccion estadoAtraccion, double distanciaKM, DificultadSendero dificultad, bool requiereGuia)
-            : base(id, nombre, capacidadpersona, estadoAtraccion)
+        // constructor que envia datos base y asigna los atributos propios
+        public Sendero(string id, string nombre, int capacidadPersona, EstadoAtraccion estadoAtraccion, double distanciaKm, DificultadSendero dificultad, bool requiereGuia)
+            : base(id, nombre, capacidadPersona, estadoAtraccion)
         {
-            DistanciaKM = distanciaKM;
-            Dificultad = dificultad;
-            RequiereGuia = requiereGuia;
-        }
-        public double GetDistanciaKm()
-        {
-            return DistanciaKM;
-        }
-
-        public void SetDistanciaKm(double distanciaKM)
-        {
-            if (distanciaKM <= 0)
-            {
-                Console.WriteLine("la distancia del sendero debe ser mayor que cero.");
-            }
-            else
-            {
-                this.DistanciaKM = distanciaKM;
-            }
-        }
-
-        public DificultadSendero GetDificultad()
-        {
-            return Dificultad;
-        }
-
-        public void SetDificultad(DificultadSendero dificultad)
-        {
+            this.DistanciaKm = distanciaKm;
             this.Dificultad = dificultad;
-        }
-
-        public bool GetRequiereGuia()
-        {
-            return RequiereGuia;
-        }
-
-        public void SetRequiereGuia(bool requiereGuia)
-        {
             this.RequiereGuia = requiereGuia;
+            this._guiaAsignado = null;
         }
 
-        public GuiaTuristico GetGuia()
+        // propiedad distancia en kilometros con validacion sencilla
+        public double DistanciaKm
         {
-            return guiaAsignado;
+            get { return _distanciaKm; }
+            set
+            {
+                if (value <= 0)
+                {
+                    Console.WriteLine("la distancia del sendero debe ser mayor que cero");
+                    _distanciaKm = 1.0;
+                }
+                else
+                {
+                    _distanciaKm = value;
+                }
+            }
         }
 
-        public void SetGuia(GuiaTuristico guia)
+        // propiedad para la dificultad del sendero
+        public DificultadSendero Dificultad
         {
-            this.guiaAsignado = guia;
+            get { return _dificultad; }
+            set { _dificultad = value; }
         }
-        //Metodo para mostrar la informacion del sendero
+
+        // propiedad para saber si requiere guia
+        public bool RequiereGuia
+        {
+            get { return _requiereGuia; }
+            set { _requiereGuia = value; }
+        }
+
+        // propiedad para el guia turistico asignado
+        public GuiaTuristico GuiaAsignado
+        {
+            get { return _guiaAsignado; }
+            set { _guiaAsignado = value; }
+        }
+
+        // metodo sobrescrito para mostrar datos del sendero
         public override void MostrarInformacion()
         {
             base.MostrarInformacion();
-            string textoGuia = "no";
-            if (RequiereGuia == true)
-            {
-                textoGuia = "si";
-            }
-            Console.WriteLine("Sendero de " + DistanciaKM + " km | Dificultad: " + Dificultad + " | Requiere guia: " + textoGuia);
+            string textoGuia = _requiereGuia ? "si" : "no";
+            Console.WriteLine("Sendero de " + _distanciaKm + " km | Dificultad: " + _dificultad + " | Requiere guia: " + textoGuia);
         }
 
+        // metodo para iniciar el recorrido guiado o individual
         public void IniciarRecorrido()
         {
-            if (RequiereGuia == true && guiaAsignado == null)
+            if (_requiereGuia && _guiaAsignado == null)
             {
                 Console.WriteLine("No se puede iniciar: este sendero necesita guia y aun no tiene uno asignado.");
             }
-            else if (guiaAsignado != null)
+            else if (_guiaAsignado != null)
             {
-                Console.WriteLine("El guia " + guiaAsignado.NombreGuia + " (" + guiaAsignado.Especialidad + ") explica el sendero " + Nombre + ": " + DistanciaKM + " km, dificultad " + Dificultad + ".");
+                Console.WriteLine("El guia " + _guiaAsignado.Nombre + " explica el sendero " + Nombre + ": " + _distanciaKm + " km, dificultad " + _dificultad + ".");
             }
             else
             {
-                Console.WriteLine("Recorres el sendero " + Nombre + " por tu cuenta (" + DistanciaKM + " km).");
+                Console.WriteLine("Recorres el sendero " + Nombre + " por tu cuenta (" + _distanciaKm + " km).");
             }
         }
+
+        // metodo para sugerir fotografia en el sendero
         public override string FotoSugerida()
         {
             return "una foto del camino entre los arboles del sendero " + Nombre;
         }
-        public override double CalcularCostos(int cantidad)
+
+        // metodo abstracto para calcular costo, en este caso es gratuito
+        public override double CalcularCosto(int cantidad)
         {
             return 0.00;
         }
-
     }
 }

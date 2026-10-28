@@ -6,84 +6,96 @@ using System.Threading.Tasks;
 
 namespace Actividad
 {
-     class Mirador:Atracciones
-     {
-        private double alturaMetro;
-        private string vistaPrincipal;
-        private string material;
+    // subclase mirador que hereda de atracciones
+    public class Mirador : Atracciones
+    {
+        // atributos privados 
+        private double _alturaMetros;
+        private string _vistaPrincipal;
+        private string _material;
 
-        public Mirador(string id,string nombre,int capacidad,EstadoAtraccion estadoAtraccion,double alturaMetro,string VistaPrincipal,string Material ):base(id,nombre,capacidad,estadoAtraccion)
+        // constructor 
+        public Mirador(string id, string nombre, int capacidad, EstadoAtraccion estadoAtraccion, double alturaMetros, string vistaPrincipal, string material)
+            : base(id, nombre, capacidad, estadoAtraccion)
         {
-            this.alturaMetro = alturaMetro;
-            this.vistaPrincipal = VistaPrincipal;
-            this.material = Material;
+            this.AlturaMetros = alturaMetros;
+            this.VistaPrincipal = vistaPrincipal;
+            this.Material = material;
         }
 
-        public double AlturaMetro
+        // propiedad altura con validacion para que la altura sea mayor que cero
+        public double AlturaMetros
         {
-            get { return alturaMetro; }
+            get { return _alturaMetros; }
             set
             {
                 if (value <= 0)
                 {
-                    Console.WriteLine("la altura del mirador debe ser mayor que cero.");
+                    Console.WriteLine("la altura del mirador debe ser mayor que cero");
+                    _alturaMetros = 1.0;
                 }
                 else
                 {
-                    this.alturaMetro = value;
+                    _alturaMetros = value;
                 }
             }
         }
-        public string VistaPrincipal 
+
+        // propiedad vista principal con validacion para qque no sea vacio
+        public string VistaPrincipal
         {
-            get { return vistaPrincipal; }
+            get { return _vistaPrincipal; }
             set
             {
-                if (vistaPrincipal == null || vistaPrincipal.Trim() == "")
+                if (string.IsNullOrWhiteSpace(value))
                 {
-                    Console.WriteLine("la vista principal no puede estar vacia.");
+                    Console.WriteLine("la vista principal no puede estar vacia");
+                    _vistaPrincipal = "vista general";
                 }
                 else
                 {
-                    this.vistaPrincipal = value;
+                    _vistaPrincipal = value;
                 }
             }
         }
 
-        public string Material 
+        // propiedad material con validacion para que no sea vacio
+        public string Material
         {
-            get { return material; }
+            get { return _material; }
             set
             {
-                if (material == null || material.Trim() == "")
+                if (string.IsNullOrWhiteSpace(value))
                 {
-                    Console.WriteLine("el material no puede estar vacio.");
+                    Console.WriteLine("el material no puede estar vacio");
+                    _material = "madera";
                 }
                 else
                 {
-                    this.material = value;
+                    _material = value;
                 }
             }
         }
 
-
-
+        // metodo para mostrar informacion del mirador
         public override void MostrarInformacion()
         {
             base.MostrarInformacion();
-            Console.WriteLine($"Altura en Metros: {AlturaMetro}");
-            Console.WriteLine($"Vista Principal: {vistaPrincipal}");
-            Console.WriteLine($"Material del Mirador: {material}");
+            Console.WriteLine($"Altura en Metros: {_alturaMetros}");
+            Console.WriteLine($"Vista Principal: {_vistaPrincipal}");
+            Console.WriteLine($"Material del Mirador: {_material}");
         }
-        //metodo para sugerir una foto desde el mirador
+
+        // metodo para sugerir una foto panoramica en el mirador
         public override string FotoSugerida()
         {
-            return "una foto panoramica con la vista de " + vistaPrincipal;
+            return "una foto panoramica con la vista de " + _vistaPrincipal;
         }
-        
-        public override double CalcularCostos(int cantidad)
+
+        // metodo abstracto para calcular el costo del mirador, que en este caso es gratuito
+        public override double CalcularCosto(int cantidad)
         {
             return 0.00;
         }
-     }
+    }
 }

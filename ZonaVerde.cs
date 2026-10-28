@@ -6,43 +6,53 @@ using System.Threading.Tasks;
 
 namespace Actividad
 {
-    class ZonaVerde: Atracciones
+    // subclase zona verde que hereda de atracciones
+    public class ZonaVerde : Atracciones
     {
-        private TipoZonaVerde tipoZona;
-        private bool requiereTrajeBano;
+        // atributos privados con guion bajo
+        private TipoZonaVerde _tipoZona;
+        private bool _requiereTrajeBano;
 
-        public ZonaVerde(
-           string id, string nombre, int capacidad,TipoZonaVerde tipoZona): base(id, nombre, capacidad,EstadoAtraccion.Disponible)
+        // constructor que envia datos base a la clase padre
+        public ZonaVerde(string id, string nombre, int capacidad, TipoZonaVerde tipoZona)
+            : base(id, nombre, capacidad, EstadoAtraccion.Disponible)
         {
-            this.tipoZona = tipoZona;
-            this.requiereTrajeBano = false;
+            this.TipoZona = tipoZona;
+            this.RequiereTrajeBano = false;
         }
 
+        // propiedad para el tipo de zona verde
         public TipoZonaVerde TipoZona
         {
-            get { return tipoZona; }
-            set { tipoZona = value; }
+            get { return _tipoZona; }
+            set { _tipoZona = value; }
         }
 
+        // propiedad para verificar si requiere traje de bano
         public bool RequiereTrajeBano
         {
-            get { return requiereTrajeBano; }
-            set { requiereTrajeBano = value; }
+            get { return _requiereTrajeBano; }
+            set { _requiereTrajeBano = value; }
         }
 
+        // metodo para mostrar datos de la zona verde
         public override void MostrarInformacion()
         {
-            Console.WriteLine($"Zona verde: {Nombre} | Tipo: " +
-                $"{TipoZona} | " +
-                $"Requiere traje de baño: {RequiereTrajeBano}");
+            base.MostrarInformacion();
+            string textoTraje = _requiereTrajeBano ? "si" : "no";
+            Console.WriteLine($"   Zona verde: {Nombre} | Tipo: {_tipoZona} | Requiere traje de baño: {textoTraje}");
         }
 
-        public override double CalcularCostos(int cantidad)
+        // metodo para sugerir foto familiar en el lugar
+        public override string FotoSugerida()
+        {
+            return "una foto familiar en las areas verdes y juegos al aire libre";
+        }
+
+        // metodo abstracto para calcular el costo de la zona verde, que en este caso es gratuito
+        public override double CalcularCosto(int cantidad)
         {
             return 0.00;
         }
     }
-
-
 }
-
