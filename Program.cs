@@ -60,7 +60,8 @@ namespace Actividad
         static void Main(string[] args)
         {
             // creacion del parque cerro verde
-            parqueCerroVerde = new Parque("Parque Natural Cerro Verde", TipoParque.Narural, "Santa Ana", "8:00 AM - 5:00 PM", 1.50);
+            Console.WriteLine(@"        P A R Q U E   N A T U R A L    ");
+            parqueCerroVerde = new Parque("--> Parque Natural Cerro Verde", TipoParque.Narural, "Santa Ana", "8:00 AM - 5:00 PM", 1.50);
             parqueCerroVerde.AbrirParque();
 
             // creacion de atracciones para cerro verde
@@ -74,11 +75,16 @@ namespace Actividad
             parqueCerroVerde.AgregarAtraccion(cabanaCipres);
 
             // creacion y asignacion del guia
-            GuiaTuristico guiaCerro = new GuiaTuristico("G-101", "Marlon Osorio", EspecialidadGuia.senderismo, true);
+            GuiaTuristico guiaCerro = new GuiaTuristico("--> G-101", "--> Marlon Osorio", EspecialidadGuia.senderismo, true);
+            Console.WriteLine("************************************************************************");
+
             guiaCerro.AsignarRecorrido(senderoFlores);
 
             // creacion del parque sihuatehuacan
-            parqueSihuatehuacan = new Parque("Parque Recreativo Sihuatehuacan", TipoParque.Acuatico, "Santa Ana", "7:00 AM - 4:00 PM", 1.50);
+            Console.WriteLine("************************************************************************");
+            Console.WriteLine(@"        P A R Q U E   A G U A T I C O ");
+            parqueSihuatehuacan = new Parque("--> Parque Recreativo Sihuatehuacan", TipoParque.Acuatico, "Santa Ana", "7:00 AM - 4:00 PM", 1.50);
+
             parqueSihuatehuacan.AbrirParque();
 
             // creacion de atracciones para sihuatehuacan
