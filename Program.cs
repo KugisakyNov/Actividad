@@ -366,6 +366,8 @@ namespace Actividad
                 Console.WriteLine("No hay visitante dentro de ningun parque.");
                 return;
             }
+            visitanteActual.MostrarResumen();
+
 
             // solo si pudo salir limpiamos el parque seleccionado
             bool pudoSalir = visitanteActual.SalirDelParque();

@@ -18,6 +18,8 @@ namespace Actividad
         private Boleto _boleto;
         private Parque _parqueVisitado;
         private List<Atracciones> _atraccionesVisitadas;
+        private List<Atracciones>_atraccionesFotografiadas;
+
         private int _fotosTomadas;
 
         // constructor
@@ -29,6 +31,7 @@ namespace Actividad
             this.VisitantesEnGrupo = personasEnGrupo;
             this.EsExtranjero = esExtranjero;
             this._atraccionesVisitadas = new List<Atracciones>();
+            this._atraccionesFotografiadas = new List<Atracciones>();
             this._fotosTomadas = 0;
             this._parqueVisitado = null;
             this._boleto = null;
@@ -133,8 +136,11 @@ namespace Actividad
         // propiedad de solo lectura para la lista de atracciones visitadas
         public List<Atracciones> AtraccionesVisitadas
         {
+
             get { return _atraccionesVisitadas; }
         }
+
+
 
         // propiedad para el contador de fotografias
         public int FotosTomadas
@@ -144,12 +150,74 @@ namespace Actividad
         }
         public void MostrarTotalFotosTomadas()
         {
-            Console.WriteLine(Nombre + " tomo: " + _fotosTomadas + " fotos en tolal");
+            Console.WriteLine(Nombre + " tomo: " + _fotosTomadas + " fotos en total.");
+
+            Console.WriteLine("Fotografias tomadas en:");
+
+            if (_atraccionesFotografiadas.Count > 0)
+            {
+                for (int i = 0; i < _atraccionesFotografiadas.Count; i++)
+                {
+                    Console.WriteLine((i + 1) + ". " + _atraccionesFotografiadas[i].Nombre);
+                }
+            }
+            else
+            {
+                Console.WriteLine("No ha tomado fotografias.");
+            }
         }
-        // metodo para registrar la llegada a la taquilla
-        public void RegistrarLlegada()
+
+
+        // Metodo para mostrar el resumen de la visita
+        public void MostrarResumen()
         {
-            Console.WriteLine($"{_nombre} ha llegado a la entrada con un grupo de {_personasEnGrupo} personas.");
+            Console.WriteLine("\n========== RESUMEN DE VISITA ==========");
+
+            Console.WriteLine("Nombre: " + _nombre);
+            Console.WriteLine("DUI o Pasaporte: " + _duiOPasaporte);
+            Console.WriteLine("Edad: " + _edad);
+            Console.WriteLine("Personas en el grupo: " + _personasEnGrupo);
+            Console.WriteLine("Tipo de visitante: " + (_esExtranjero ? "Extranjero" : "Nacional"));
+
+            Console.WriteLine("Parque visitado: " + _parqueVisitado.NombreParque);
+
+            Console.WriteLine("\nAtracciones visitadas:");
+
+            if (_atraccionesVisitadas.Count > 0)
+            {
+                for (int i = 0; i < _atraccionesVisitadas.Count; i++)
+                {
+                    Console.WriteLine((i + 1) + ". " + _atraccionesVisitadas[i].Nombre);
+                }
+            }
+            else
+            {
+                Console.WriteLine("No visito ninguna atraccion.");
+            }
+
+            Console.WriteLine("\nFotografias Panoramica tomadas: ");
+            if (_atraccionesFotografiadas.Count > 0)
+            {
+                for (int i = 0; i < _atraccionesFotografiadas.Count; i++)
+                {
+                    Console.WriteLine((i + 1) + ". " + _atraccionesFotografiadas[i].Nombre);
+                }
+            }
+           
+
+            Console.WriteLine("Total de fotografias: " + _fotosTomadas);
+
+            if (_boleto != null)
+            {
+                Console.WriteLine("\nNumero de boleto: " + _boleto.NumeroBoleto);
+                Console.WriteLine("Fecha: " + _boleto.FechaEmision);
+                Console.WriteLine("Entrada: $" + _boleto.PrecioEntrada.ToString("0.00"));
+                Console.WriteLine("Costo de atracciones: $" + CalcularCostoAtracciones().ToString("0.00"));
+                Console.WriteLine("Total: $" + _boleto.CalcularTotal().ToString("0.00"));
+                Console.WriteLine("Estado: " + (_boleto.Pagado ? "Pagado" : "Pendiente"));
+            }
+
+            Console.WriteLine("========================================");
         }
 
         // metodo para entrar al parque y adquirir boleto
@@ -228,7 +296,6 @@ namespace Actividad
             }
         }
 
-        // metodo para salir del parque
         // metodo para salir del parque retornando si pudo salir o no
         public bool SalirDelParque()
         {
@@ -237,6 +304,7 @@ namespace Actividad
                 Console.WriteLine(_nombre + " no esta dentro de ningun parque.");
                 return false;
             }
+           
 
             // solo exige pasar por caja si debe servicios adicionales
             if (CalcularCostoAtracciones() > 0 && !_extrasPagados)
@@ -244,6 +312,8 @@ namespace Actividad
                 Console.WriteLine("Tienes pendiente el pago de tu cabana o servicio extra. Pasa por la Opcion 6 antes de salir.");
                 return false;
             }
+            
+
 
             for (int i = 0; i < _atraccionesVisitadas.Count; i++)
             {
@@ -257,6 +327,9 @@ namespace Actividad
             _extrasPagados = false;
             return true;
         }
+
+      
+        
 
         //metodo para marcar servicios extras del visitante como pagados, para poder salir del parque
         public void MarcarExtrasPagados()
@@ -277,8 +350,15 @@ namespace Actividad
             else
             {
                 _fotosTomadas++;
+                _atraccionesFotografiadas.Add(atraccion);
                 Console.WriteLine($"{_nombre} toma la foto #{_fotosTomadas}: {atraccion.FotoSugerida()}.");
             }
+        }
+
+        // metodo para registrar la llegada a la taquilla
+        public void RegistrarLlegada()
+        {
+            Console.WriteLine($"{_nombre} ha llegado a la entrada con un grupo de {_personasEnGrupo} personas.");
         }
 
         // metodo para calcular el costo total
