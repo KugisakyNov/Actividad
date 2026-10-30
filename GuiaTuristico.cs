@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Actividad
 {
+
     // clase concreta para modelar al guia turistico del parque
     public class GuiaTuristico
     {
@@ -17,6 +18,10 @@ namespace Actividad
         private EspecialidadGuia _especialidad;
         private bool _estaDisponible;
         private Sendero _senderoAsignado;
+
+
+
+
 
         // constructor para inicializar los datos del guia
         public GuiaTuristico(string carnetGuia, string nombre, EspecialidadGuia especialidad, bool estaDisponible)
@@ -82,6 +87,15 @@ namespace Actividad
         {
             get { return _senderoAsignado; }
         }
+        public int RecorridosAsignados
+        {
+            get { return _recorridosAsignados; }
+        }
+
+        public int RecorridosRealizados
+        {
+            get { return _recorridosRealizados; }
+        }
 
         // metodo para asignar un recorrido al sendero 
         public void AsignarRecorrido(Sendero sendero)
@@ -115,6 +129,8 @@ namespace Actividad
             {
                 _senderoAsignado.GuiaAsignado = null;
                 _senderoAsignado = null;
+
+                _recorridosRealizados++;
             }
             _estaDisponible = true;
             Console.WriteLine("El guia " + _nombre + " termino su recorrido y ya esta disponible.");
