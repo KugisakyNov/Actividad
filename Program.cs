@@ -73,12 +73,13 @@ namespace Actividad
             parqueCerroVerde.AgregarAtraccion(miradorVolcanes);
             parqueCerroVerde.AgregarAtraccion(senderoFlores);
             parqueCerroVerde.AgregarAtraccion(cabanaCipres);
+            Console.WriteLine("***************************************************************");
 
             // creacion y asignacion del guia
-            GuiaTuristico guiaCerro = new GuiaTuristico("--> G-101", "--> Marlon Osorio", EspecialidadGuia.senderismo, true);
-            Console.WriteLine("************************************************************************");
-
+            Console.WriteLine("\n**** Datos del Guia *****");
+            GuiaTuristico guiaCerro = new GuiaTuristico("G-101", "Marlon Osorio", EspecialidadGuia.senderismo, true);
             guiaCerro.AsignarRecorrido(senderoFlores);
+
 
             // creacion del parque sihuatehuacan
             Console.WriteLine("************************************************************************");
@@ -88,6 +89,7 @@ namespace Actividad
             parqueSihuatehuacan.AbrirParque();
 
             // creacion de atracciones para sihuatehuacan
+
             Piscinas piscinaFamiliar = new Piscinas("P-01", "Piscina Grande Familiar", 50, EstadoAtraccion.Disponible, 1.6, true);
             ZonaVerde juegosNinos = new ZonaVerde("M-02", "zona recreativa de juegos en el area verde", 30, TipoZonaVerde.AreaColumpios);
 
@@ -224,17 +226,31 @@ namespace Actividad
                 Console.Write("Debe ingresar un número mayor que 0: ");
             }
 
-            int opcion;
-            Console.Write("¿Es extranjero? 1 = Si, 2 = No: ");
-            while (!int.TryParse(Console.ReadLine(), out opcion) || (opcion != 1 && opcion != 2))
-            {
-                Console.Write("Seleccione 1 o 2: ");
-            }
+           
 
-            bool esExtranjero = false;
-            if (opcion == 1)
+            int cantidadExtranjeros = 0;
+
+            if (grupo == 1)
             {
-                esExtranjero = true;
+                int opcion;
+                Console.Write("¿Es extranjero? 1 = Si, 2 = No: ");
+                while (!int.TryParse(Console.ReadLine(), out opcion) || (opcion != 1 && opcion != 2))
+                {
+                    Console.Write("Seleccione 1 o 2: ");
+                }
+
+                if (opcion == 1)
+                {
+                    cantidadExtranjeros = 1;
+                }
+            }
+            else
+            {
+                Console.Write("¿Cuantas personas del grupo de " + grupo + " son extranjeros? (0 a " + grupo + "): ");
+                while (!int.TryParse(Console.ReadLine(), out cantidadExtranjeros) || cantidadExtranjeros < 0 || cantidadExtranjeros > grupo)
+                {
+                    Console.Write("Ingrese un numero valido entre 0 y " + grupo + ": ");
+                }
             }
 
             visitanteActual = new Visitantes(
@@ -242,7 +258,7 @@ namespace Actividad
                 nombre,
                 edad,
                 grupo,
-                esExtranjero
+                cantidadExtranjeros
             );
 
             visitanteActual.RegistrarLlegada();
@@ -265,6 +281,11 @@ namespace Actividad
 
             parqueSeleccionado = (opc == 1) ? parqueCerroVerde : parqueSihuatehuacan;
             visitanteActual.EntrarAlParque(parqueSeleccionado);
+            Console.WriteLine("************************************");
+            Console.WriteLine("Total de Boletos vendidos: "
+                + Parque.ContadorDeBoletos);
+           
+
         }
 
         // metodo para listar atracciones
@@ -373,11 +394,13 @@ namespace Actividad
 
             // recorrido uno vanessa lara en cerro verde
             Console.WriteLine("--- RECORRIDO 1 CERRO VERDE ---");
-            Visitantes vanessa = new Visitantes("05123456-7", "Vanessa Lara", 24, 2, false);
+            Visitantes vanessa = new Visitantes("05123456-7", "Vanessa Lara", 24, 2, 0);
             vanessa.RegistrarLlegada();
             vanessa.EntrarAlParque(parqueCerroVerde);
+            Console.WriteLine("Boletos vendidos: " + Parque.ContadorDeBoletos);
 
             // obtener atracciones de cerro verde
+
             Atracciones mirador = parqueCerroVerde.GetAtraccion(0);
             Atracciones sendero = parqueCerroVerde.GetAtraccion(1);
             Atracciones cabana = parqueCerroVerde.GetAtraccion(2);
@@ -389,6 +412,7 @@ namespace Actividad
             // vanessa visita el sendero
             vanessa.VisitarAtraccion(sendero);
             Console.WriteLine("Camina por el " + sendero.Nombre);
+
 
             // vanessa visita y reserva cabana
             vanessa.VisitarAtraccion(cabana);
@@ -408,11 +432,13 @@ namespace Actividad
 
             // recorrido dos samuel de luque en el parque sihuatehuacan
             Console.WriteLine("--- RECORRIDO 2 SIHUATEHUACAN ---");
-            Visitantes samuel = new Visitantes("P98765432", "Samuel de Luque", 35, 1, true);
+            Visitantes samuel = new Visitantes("P98765432", "Samuel de Luque", 35, 1, 1);
             samuel.RegistrarLlegada();
             samuel.EntrarAlParque(parqueSihuatehuacan);
+            Console.WriteLine("Boletos vendidos: " + Parque.ContadorDeBoletos);
 
             // obtener atracciones de sihuatehuacan
+
             Atracciones piscina = parqueSihuatehuacan.GetAtraccion(0);
             Atracciones juegos = parqueSihuatehuacan.GetAtraccion(1);
 

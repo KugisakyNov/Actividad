@@ -14,6 +14,7 @@ namespace Actividad
         private string _nombre;
         private int _edad;
         private int _personasEnGrupo;
+        private int _cantidadExtranjeros;
         private bool _esExtranjero;
         private Boleto _boleto;
         private Parque _parqueVisitado;
@@ -21,13 +22,14 @@ namespace Actividad
         private int _fotosTomadas;
 
         // constructor
-        public Visitantes(string duiOPasaporte, string nombre, int edad, int personasEnGrupo, bool esExtranjero)
+        public Visitantes(string duiOPasaporte, string nombre, int edad, int personasEnGrupo, int cantidadExtrangeros)
         {
             this.DuiOPasaporte = duiOPasaporte;
             this.Nombre = nombre;
             this.Edad = edad;
             this.VisitantesEnGrupo = personasEnGrupo;
-            this.EsExtranjero = esExtranjero;
+            this.CantidadExtranjeros = cantidadExtrangeros;
+            this.EsExtranjero = cantidadExtrangeros >0;
             this._atraccionesVisitadas = new List<Atracciones>();
             this._fotosTomadas = 0;
             this._parqueVisitado = null;
@@ -105,6 +107,25 @@ namespace Actividad
                 }
             }
         }
+        public int CantidadExtranjeros
+        {
+            get { return _cantidadExtranjeros; }
+            set
+            {
+                if (value < 0)
+                {
+                    _cantidadExtranjeros = 0;
+                }
+                else if (value > _personasEnGrupo)
+                {
+                    _cantidadExtranjeros = _personasEnGrupo;
+                }
+                else
+                {
+                    _cantidadExtranjeros = value;
+                }
+            }
+        }
 
         // propiedad para indicar si es visitante extranjero
         public bool EsExtranjero
@@ -173,7 +194,32 @@ namespace Actividad
             {
                 _boleto = parque.VenderBoleto(this);
                 _parqueVisitado = parque;
-                Console.WriteLine($"{_nombre} ha comprado el boleto {_boleto.NumeroBoleto} por ${_boleto.PrecioEntrada.ToString("0.00")} y ha entrado a {parque.NombreParque}.");
+
+                int nacionales = _personasEnGrupo - _cantidadExtranjeros;
+
+                Console.WriteLine("-----------------------------------");
+                Console.WriteLine("COMPROBANTE DE ENTRADA");
+                Console.WriteLine("Visitante: " + _nombre);
+                Console.WriteLine("Personas en el grupo: " + _personasEnGrupo);
+
+                if (nacionales > 0 && _cantidadExtranjeros > 0)
+                {
+                    Console.WriteLine("Tipo: Grupo Mixto");
+                    Console.WriteLine("Detalle: " + nacionales + " nacional(es) ($1.50 c/u) y " + _cantidadExtranjeros + " extranjero(s) ($3.00 c/u)");
+                }
+                else if (_cantidadExtranjeros > 0)
+                {
+                    Console.WriteLine("Tipo: Extranjero(s)");
+                    Console.WriteLine("Precio por persona: $3.00");
+                }
+                else
+                {
+                    Console.WriteLine("Tipo: Nacional(es)");
+                    Console.WriteLine("Precio por persona: $1.50");
+                }
+
+                Console.WriteLine("TOTAL COBRADO: $" + _boleto.PrecioEntrada.ToString("0.00"));
+                Console.WriteLine("-----------------------------------");
             }
         }
 

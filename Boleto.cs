@@ -108,17 +108,41 @@ namespace Actividad
         {
             Console.WriteLine("----------- COMPROBANTE -----------");
             Console.WriteLine($"Boleto: {_numeroBoleto}  Fecha: {_fechaEmision}");
-            Console.WriteLine($"Visitante: {_cliente?.Nombre} (grupo de {_cliente?.VisitantesEnGrupo})");
-            Console.WriteLine($"Entrada al parque: ${_precioEntrada:0.00}");
 
             if (_cliente != null)
             {
+                int totalGrupo = _cliente.VisitantesEnGrupo;
+                int extranjeros = _cliente.CantidadExtranjeros;
+                int nacionales = totalGrupo - extranjeros;
+
+                Console.WriteLine($"Visitante: {_cliente.Nombre} (grupo de {totalGrupo})");
+
+                if (nacionales > 0 && extranjeros > 0)
+                {
+                    Console.WriteLine($"Entrada al parque: ${_precioEntrada:0.00} ({nacionales} nacional(es) y {extranjeros} extranjero(s))");
+                }
+                else if (extranjeros > 0)
+                {
+                    Console.WriteLine($"Entrada al parque: ${_precioEntrada:0.00} (Tarifa Extranjero)");
+                }
+                else
+                {
+                    Console.WriteLine($"Entrada al parque: ${_precioEntrada:0.00} (Tarifa Nacional)");
+                }
+
                 for (int i = 0; i < _cliente.AtraccionesVisitadas.Count; i++)
                 {
                     Atracciones at = _cliente.AtraccionesVisitadas[i];
                     double costo = at.CalcularCosto(_cliente.VisitantesEnGrupo);
-                    Console.WriteLine($"{at.Nombre}: ${costo:0.00}");
+                    if (costo > 0)
+                    {
+                        Console.WriteLine($"  {at.Nombre}: ${costo:0.00}");
+                    }
                 }
+            }
+            else
+            {
+                Console.WriteLine($"Entrada al parque: ${_precioEntrada:0.00}");
             }
 
             Console.WriteLine($"TOTAL A PAGAR: ${CalcularTotal():0.00}");
