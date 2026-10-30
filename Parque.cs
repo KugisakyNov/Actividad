@@ -8,7 +8,11 @@ namespace Actividad
 {
     // clase concreta para modelar los parques
     public class Parque
+
     {
+        // miebro estatico 
+        public static int ContadorDeBoletos = 0;
+
         // atributos privados 
         private string _nombre;
         private TipoParque _tipoParque;
@@ -171,18 +175,28 @@ namespace Actividad
         // metodo para calcular el precio segun categoria de visitante
         public double CalcularPrecioEntrada(Visitantes v)
         {
-            double precio = _precioEntradaBase * v.VisitantesEnGrupo;
+            double precioPorPersona;
+
             if (v.EsExtranjero)
             {
-                precio = precio * 2;
+                precioPorPersona = 3.00;
             }
-            return precio;
+            else
+            {
+                precioPorPersona = 1.50;
+            }
+
+            return precioPorPersona * v.VisitantesEnGrupo;
         }
 
         // metodo para vender el boleto cobrando la entrada inmediatamente
         public Boleto VenderBoleto(Visitantes v)
         {
             _boletosVendidos = _boletosVendidos + 1;
+
+            ContadorDeBoletos += v.VisitantesEnGrupo;
+
+
             string numero = "B-" + (100 + _boletosVendidos);
             string fecha = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
 

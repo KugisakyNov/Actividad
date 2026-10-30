@@ -170,7 +170,17 @@ namespace Actividad
             {
                 _boleto = parque.VenderBoleto(this);
                 _parqueVisitado = parque;
-                Console.WriteLine($"{_nombre} ha comprado el boleto {_boleto.NumeroBoleto} por ${_boleto.PrecioEntrada.ToString("0.00")} y ha entrado a {parque.NombreParque}.");
+                double precioIndividual = EsExtranjero ? 3.00 : 1.50;
+
+                Console.WriteLine("-----------------------------------");
+                Console.WriteLine("COMPROBANTE DE ENTRADA");
+                Console.WriteLine("Visitante: " + _nombre);
+                Console.WriteLine("Tipo: " + (EsExtranjero ? "Extranjero" : "Nacional"));
+                Console.WriteLine("Personas en el grupo: " + VisitantesEnGrupo);
+                Console.WriteLine("Precio por persona: $" + precioIndividual.ToString("0.00"));
+                Console.WriteLine("TOTAL COBRADO: $" + _boleto.PrecioEntrada.ToString("0.00"));
+                Console.WriteLine("-----------------------------------");
+
             }
         }
 
