@@ -65,7 +65,7 @@ namespace Actividad
             parqueCerroVerde.AbrirParque();
 
             // creacion de atracciones para cerro verde
-            Mirador miradorVolcanes = new Mirador("M-01", "Mirador Los Volcanes", 40, EstadoAtraccion.Disponible, 2030.0, "Volcan Izalco", "Madera y estructura de hierro");
+            Mirador miradorVolcanes = new Mirador("M-01", "Mirador Los Volcanes", 40, EstadoAtraccion.Disponible, 20.0, "Volcan Izalco", "Madera y estructura de hierro");
             Sendero senderoFlores = new Sendero("S-01", "Sendero Las Flores", 25, EstadoAtraccion.Disponible, 2.5, DificultadSendero.Media, true);
             Cabañas cabanaCipres = new Cabañas("C-01", "Cabaña El Ciprés", 6, EstadoAtraccion.Disponible, 1, 2, 45.00, EstadoCabaña.Disponible);
 
@@ -89,12 +89,12 @@ namespace Actividad
 
             // creacion de atracciones para sihuatehuacan
             Piscinas piscinaFamiliar = new Piscinas("P-01", "Piscina Grande Familiar", 50, EstadoAtraccion.Disponible, 1.6, true);
-            Mirador juegosNinos = new Mirador("M-02", "zona recreativa de juegos en el area verde", 30, EstadoAtraccion.Disponible, 0.0, "Cancha y parque", "Hierro y plastico");
+            ZonaVerde juegosNinos = new ZonaVerde("M-02", "zona recreativa de juegos en el area verde", 30, TipoZonaVerde.AreaColumpios);
 
             // agregar atracciones a sihuatehuacan
             parqueSihuatehuacan.AgregarAtraccion(piscinaFamiliar);
             parqueSihuatehuacan.AgregarAtraccion(juegosNinos);
-
+            guiaCerro.MostrarTotalRecorridos();
             Console.WriteLine("\nPresiona cualquier tecla para ir al Menu...");
             Console.ReadKey();
 
@@ -167,6 +167,26 @@ namespace Actividad
             Console.WriteLine("0. Terminar el programa");
         }
 
+        //metodo para validar el nombre que no lleve numeros 
+        static bool EsNombreValido(string texto)
+        {
+            if (string.IsNullOrWhiteSpace(texto))
+            {
+                return false;
+            }
+
+            for (int i = 0; i < texto.Length; i++)
+            {
+                char c = texto[i];
+                if (!char.IsLetter(c) && c != ' ')
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         // metodo para pedir datos y registrar visitante
         static void RegistrarVisitante()
         {
@@ -179,10 +199,9 @@ namespace Actividad
                 Console.Write("Nombre completo: ");
                 nombre = Console.ReadLine();
 
-                if (string.IsNullOrWhiteSpace(nombre) ||
-                    !nombre.All(c => char.IsLetter(c) || c == ' '))
+                if (!EsNombreValido(nombre))
                 {
-                    Console.WriteLine("Error: El nombre solo debe contener letras.");
+                    Console.WriteLine("El nombre solo debe contener letras.");
                     nombre = "";
                 }
 
@@ -192,12 +211,10 @@ namespace Actividad
             string dui = Console.ReadLine();
 
             int edad;
-
             Console.Write("Edad: ");
-
-            while (!int.TryParse(Console.ReadLine(), out edad) || edad < 0 || edad > 120)
+            while (!int.TryParse(Console.ReadLine(), out edad) || edad < 0 || edad > 100)
             {
-                Console.Write("Edad inválida. Ingrese una edad entre 0 y 120: ");
+                Console.Write("Ingrese una edad entre 0 y 100: ");
             }
 
             int grupo;
@@ -208,15 +225,17 @@ namespace Actividad
             }
 
             int opcion;
-            Console.Write("¿Es extranjero? 1 = Sí, 2 = No: ");
-
-            while (!int.TryParse(Console.ReadLine(), out opcion) ||
-                   (opcion != 1 && opcion != 2))
+            Console.Write("¿Es extranjero? 1 = Si, 2 = No: ");
+            while (!int.TryParse(Console.ReadLine(), out opcion) || (opcion != 1 && opcion != 2))
             {
-                Console.Write("Opción inválida. Digite 1 o 2: ");
+                Console.Write("Seleccione 1 o 2: ");
             }
 
-            bool esExtranjero = opcion == 1;
+            bool esExtranjero = false;
+            if (opcion == 1)
+            {
+                esExtranjero = true;
+            }
 
             visitanteActual = new Visitantes(
                 dui,
@@ -375,14 +394,16 @@ namespace Actividad
             vanessa.VisitarAtraccion(cabana);
             Console.WriteLine("Se hospeda en la " + cabana.Nombre);
 
-            // vanessa toma foto polimorfica
+            // vanessa toma foto 
             vanessa.TomarFoto(mirador);
+            vanessa.TomarFoto(sendero);
+            vanessa.TomarFoto(cabana);
 
             // pago y salida de vanessa
             Console.WriteLine();
             parqueCerroVerde.ProcesarPago(vanessa);
             vanessa.SalirDelParque();
-
+            vanessa.MostrarTotalFotosTomadas();
             Console.WriteLine("\n-------------------------------------------------------------------\n");
 
             // recorrido dos samuel de luque en el parque sihuatehuacan
@@ -413,7 +434,7 @@ namespace Actividad
             Console.WriteLine();
             parqueSihuatehuacan.ProcesarPago(samuel);
             samuel.SalirDelParque();
-
+            samuel.MostrarTotalFotosTomadas();
             Console.WriteLine("\n----------------- FIN DE LA SIMULACIÓN -----------------");
         }
     }

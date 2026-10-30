@@ -15,6 +15,8 @@ namespace Actividad
         private int _capacidadPersona;
         private int _aforoActual;
         private EstadoAtraccion _estadoAtraccion;
+        //haremos uso tambien de los miembros estaticos en este caso para contar cuantas veces un visitante visita una atraccion del parque 
+        public static int TotalVisitas = 0;
 
         // constructor que inicializa los valores
         protected Atracciones(string id, string nombre, int capacidadPersona, EstadoAtraccion estadoAtraccion)
@@ -146,6 +148,7 @@ namespace Actividad
                 return false;
             }
 
+            TotalVisitas++;
             _aforoActual += cantidad;
             return true;
         }

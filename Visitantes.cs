@@ -142,7 +142,10 @@ namespace Actividad
             get { return _fotosTomadas; }
             set { _fotosTomadas = value; }
         }
-
+        public void MostrarTotalFotosTomadas()
+        {
+            Console.WriteLine(Nombre + " tomo: " + _fotosTomadas + " fotos en tolal");
+        }
         // metodo para registrar la llegada a la taquilla
         public void RegistrarLlegada()
         {
