@@ -18,6 +18,8 @@ namespace Actividad
         private EspecialidadGuia _especialidad;
         private bool _estaDisponible;
         private Sendero _senderoAsignado;
+        private int _recorridosAsignados;
+        private int _recorridosRealizados;
 
 
 
