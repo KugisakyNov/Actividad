@@ -124,6 +124,7 @@ namespace Actividad
             }
             _estaDisponible = true;
             Console.WriteLine("El guia " + _nombre + " termino su recorrido y ya esta disponible.");
+
         }
     }
 }
