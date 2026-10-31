@@ -18,6 +18,8 @@ namespace Actividad
         private EspecialidadGuia _especialidad;
         private bool _estaDisponible;
         private Sendero _senderoAsignado;
+        private int _recorridosAsignados;
+        private int _recorridosRealizados;
 
 
 
@@ -105,6 +107,7 @@ namespace Actividad
                 _estaDisponible = false;
                 TotalRecorridos++;
                 Console.WriteLine("El guia " + _nombre + " fue asignado al sendero " + sendero.Nombre + ".");
+>>>>>>>>> Temporary merge branch 2
             }
         }
         //metodo para mostrar el total de recorridos
